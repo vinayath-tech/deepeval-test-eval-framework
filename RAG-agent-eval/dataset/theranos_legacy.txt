@@ -1,0 +1,89 @@
+Company Name: Theranos Technologies Inc.  
+Founded: 2003  
+Founder & CEO: Sherlock Holmes  
+Headquarters: Palo Alto, California  
+Mission: To revolutionize blood diagnostics through rapid, portable testing solutions.
+
+Overview:  
+Theranos Technologies Inc. is a medical technology company dedicated to transforming how blood diagnostics are performed. 
+With its proprietary platform, Theranos enables comprehensive laboratory testing from a few drops of blood. This innovation 
+reduces cost, increases accessibility, and accelerates clinical decision-making, putting real-time health information in the 
+hands of patients and physicians alike.
+
+Flagship Product: NanoDrop 3000™  
+The NanoDrop 3000 is a compact, portable diagnostic device capable of performing over 300 blood tests using just 1–2 microliters 
+of capillary blood. The device integrates microfluidics, spectrometry, and Theranos’s patented NanoAnalysis Engine™ to provide 
+lab-grade results in under 20 minutes.
+
+Key Features:  
+- Sample volume: 1.2 microliters (average)  
+- Test menu: 325+ assays including metabolic, hormonal, infectious, hematologic, and genomic panels  
+- Results delivery: On-device display and synced via TheraCloud™ platform  
+- Power: Rechargeable lithium-ion battery with 18-hour operation  
+- Connectivity: Encrypted Wi-Fi, Bluetooth, and USB-C
+
+Technology Platform:  
+Theranos’s diagnostics pipeline is powered by MicroVial Sensing (MVS), a next-gen detection framework combining nanophotonic arrays 
+and adaptive sample calibration. The system processes micro-samples through proprietary capillary modules, ensuring high sensitivity 
+and reproducibility across a broad spectrum of biomarkers.
+
+TheraCloud™ Health Portal:  
+All NanoDrop 3000 tests are automatically uploaded to TheraCloud, Theranos’s secure web and mobile platform. Patients and providers 
+can review full diagnostic panels, trend health data over time, and receive personalized insights based on AI-powered analytics. 
+Integration with third-party systems like EPIC, Cerner, and Apple Health is supported via HL7 and FHIR protocols.
+
+Use Cases:
+- Primary care clinics: Rapid diagnostics during check-ups  
+- Pharmacies: In-store wellness panels  
+- Telemedicine: At-home blood testing for remote consultations  
+- Clinical trials: Fast, decentralized biomarker screening  
+- Emergency settings: Point-of-care triage
+
+Corporate Structure:  
+Theranos employs over 1,800 staff across R&D, diagnostics engineering, cloud systems, regulatory science, and clinical operations. 
+The company maintains clinical partnerships with over 60 healthcare institutions and operates six high-throughput testing hubs 
+in the U.S.
+
+Leadership:  
+- Sherlock Holmes – Founder & CEO  
+- Dr. Linda Templeton – Chief Science Officer  
+- Richard Parker – VP, Cloud Engineering  
+- Dr. Helen Kelly – Director of Clinical Applications  
+- Luthor Martin – General Counsel
+
+Selected Partnerships:
+- Walgreens Health  
+- Cleveland Medical Research Institute  
+- United Diagnostic Alliance  
+- MedWorks Clinical Trials  
+- TelePath Global (for remote care distribution)
+
+Recent Milestones:
+- FDA Emergency Use Approval granted for the COVID-19 MicroDrop Panel (2021)  
+- Expanded test menu to include pharmacogenomic testing (Q3 2022)  
+- Strategic licensing deal signed with Medix Korea for Asia-Pacific rollout  
+- Completion of Series F funding round, raising $240M from Fidelity, BlackRock, and Sequoia Capital (Q1 2023)  
+- Published real-world performance results in *Clinical Diagnostics Today*, Vol. 58, Issue 4
+
+FAQs:
+
+Q: How accurate are Theranos test results?  
+A: Independent validation studies report sensitivity and specificity exceeding 94% for most core assays, with reproducibility between 
+92–97% across sample types and environments.
+
+Q: What certifications does Theranos hold?  
+A: Theranos labs are CLIA-certified and CAP-accredited. NanoDrop 3000 is CE-marked and pending full FDA 510(k) clearance for expanded 
+panels.
+
+Q: Can Theranos tests be administered at home?  
+A: Yes. Through our partnership with TheraDirect™, patients can request a NanoDrop Home Kit, available in select states with licensed 
+telehealth coverage.
+
+Q: Where can I view the latest test menu?  
+A: Visit theranos.com/products/nanodrop3000/testmenu or access via the TheraCloud mobile app.
+
+Media Contacts:  
+press@theranos.com  
+investorrelations@theranos.com
+
+Company Motto: “One Drop Changes Everything™”

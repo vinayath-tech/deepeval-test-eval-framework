@@ -1,0 +1,87 @@
+[9:03:12 AM]
+James:
+Hey Adam, thanks for jumping on. I wanted to walk through the pipeline monitoring situation before the sprint planning tomorrow. Have you had a chance to look at the alerts that fired over the weekend?
+
+[9:03:28 AM]
+Adam:
+Yeah, I caught them Sunday evening actually. Three separate timeout failures on the data ingestion pipeline, all between 2 and 4 AM. Looked like it was tied to the batch job hitting the database during the scheduled backup window.
+
+[9:03:45 AM]
+James:
+That's what I suspected. We've had this conflict sitting in the backlog for a while — the backup window and the batch job were always going to clash once the data volume crossed a certain threshold. Looks like we've hit that point.
+
+[9:04:02 AM]
+Adam:
+Exactly. The batch job used to finish well before the backup kicked in, but now that we're processing about three times the row count compared to six months ago, it just isn't clearing in time anymore.
+
+[9:04:18 AM]
+James:
+So what are our options here? Do we shift the backup window, optimise the batch job, or something else entirely?
+
+[9:04:31 AM]
+Adam:
+I see three realistic paths. First, we move the backup window to 5 AM — that buys us time but doesn't fix the underlying performance issue. Second, we optimise the batch job itself, maybe add some indexing and chunking to bring the runtime down. Third, we look at incremental backups instead of full nightly ones, which reduces the overlap window significantly.
+
+[9:04:52 AM]
+James:
+Which one would you go with if it were purely your call?
+
+[9:04:58 AM]
+Adam:
+Honestly, a combination of the second and third. Optimising the batch job is overdue regardless — there are some pretty inefficient queries in there that have been bothering me for a while. And switching to incremental backups is just better practice at our current scale. Moving the window feels like a band-aid.
+
+[9:05:16 AM]
+James:
+I agree on the band-aid point. How long would the batch job optimisation realistically take?
+
+[9:05:24 AM]
+Adam:
+If I can get a focused two-day block without interruptions, I think I can get the runtime down by at least 40%. The biggest wins are probably in the join operations — we're doing some full table scans that really shouldn't be happening at this point.
+
+[9:05:41 AM]
+James:
+Okay, that's significant. And the incremental backup switch — is that something we'd need DevOps involved for?
+
+[9:05:50 AM]
+Adam:
+Yeah, that one needs Sarah's team. The config changes are on the infrastructure side. I can write up the requirements doc and hand it off to her, but I wouldn't want to touch that directly without her sign-off.
+
+[9:06:07 AM]
+James:
+Makes sense. I'll reach out to Sarah today and flag it as a priority. In the meantime, should we shift the backup window temporarily just to stop the weekend alerts while the real fix is in progress?
+
+[9:06:21 AM]
+Adam:
+Yeah, that's probably the pragmatic call. A temporary window shift keeps things stable and gives us a clean runway to do the proper fix without the pressure of alerts firing every weekend.
+
+[9:06:35 AM]
+James:
+Agreed. I'll get that change raised with ops today. One other thing I wanted to bring up — the on-call rotation. You've been picking up a disproportionate number of weekend incidents lately. We should rebalance that.
+
+[9:06:51 AM]
+Adam:
+I appreciate you flagging it. It's been fine, but yeah, the last few weeks have been heavier than usual. Would be good to spread it out a bit more, especially with the new team members who are now up to speed.
+
+[9:07:05 AM]
+James:
+I was thinking we bring Lena and Marcus into the rotation starting next month. They've both said they're ready, and it would take the pressure off you and Chris.
+
+[9:07:18 AM]
+Adam:
+That works for me. It might be worth doing one shadowed on-call week for each of them first — just so they're not flying solo on something like this weekend's situation straight away.
+
+[9:07:31 AM]
+James:
+Good call. I'll set that up. Alright, so to summarise — you'll start on the batch job optimisation this sprint, I'll loop in Sarah about the incremental backups, and we'll do a temporary window shift in the meantime to keep things quiet.
+
+[9:07:46 AM]
+Adam:
+That covers it. I'll send you a quick write-up of the query changes I'm planning before I start, just so you have visibility.
+
+[9:07:53 AM]
+James:
+Perfect. Catch you at sprint planning tomorrow.
+
+[9:07:57 AM]
+Adam:
+See you then.
