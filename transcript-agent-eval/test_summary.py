@@ -3,7 +3,7 @@ from conftest import MeetingSummarizer
 from deepeval.dataset import EvaluationDataset, Golden
 from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from deepeval.metrics import GEval
-from deepeval import evaluate
+from deepeval import evaluate, assert_test
 from deepeval.evaluate import DisplayConfig
 import pytest
 
@@ -38,6 +38,17 @@ class TestSummary:
 
         return EvaluationDataset(goldens=goldens)
     
+    def summary_concision_metric(self):
+        return self.geval_metric(
+             "Summary Concision",
+            "Assess whether the summary is accurate & focused only on the essential points of the meeting"
+        )
+
+    def action_item_check_metric(self):
+        return self.geval_metric(
+            "Action item accuracy",
+            "Are the action items accurate, complete and clearly reflect the key tasks mentioned in the meeting?"
+        )
 
     def build_test_case(self, dataset, summarizer) -> tuple[list, list]:
         summary_test_cases_list = []
@@ -81,23 +92,23 @@ class TestSummary:
 
         summary_test_cases, action_item_test_cases = self.build_test_case(dataset, summarizer) 
 
-        summary_concision = self.geval_metric(
-            "Summary Concision",
-            "Assess whether the summary is accurate & focused only on the essential points of the meeting"
-        )
+        # summary_concision = self.geval_metric(
+        #     "Summary Concision",
+        #     "Assess whether the summary is accurate & focused only on the essential points of the meeting"
+        # )
 
-        action_item_check = self.geval_metric(
-            "Action item accuracy",
-            "Are the action items accurate, complete and clearly reflect the key tasks mentioned in the meeting?"
-        )
+        # action_item_check = self.geval_metric(
+        #     "Action item accuracy",
+        #     "Are the action items accurate, complete and clearly reflect the key tasks mentioned in the meeting?"
+        # )
 
         # Evaluate all test cases once
         summary_results = evaluate(
             test_cases=summary_test_cases,
-            metrics=[summary_concision]
+            metrics=[self.summary_concision_metric()]
         )
 
         action_results = evaluate(
             test_cases=action_item_test_cases,
-            metrics=[action_item_check]
+            metrics=[self.action_item_check_metric()]
         )
