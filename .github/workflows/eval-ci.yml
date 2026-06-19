@@ -24,3 +24,22 @@ jobs:
               run: deepeval test run ./transcript-agent-eval/test_summary.py
               env:
                 OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    
+    eval-rag-agent:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+            
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.10"
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - name: Run Deepeval tests
+              run: deepeval test run ./RAG-agent-eval/test_rag.py
+              env:
+                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
