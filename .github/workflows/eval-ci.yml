@@ -21,6 +21,6 @@ jobs:
               run: pip install -r requirements.txt
 
             - name: Run Deepeval tests
-              run: deepeval test run .\transcript-agent-eval\test_summary.py
+              run: deepeval test run ./transcript-agent-eval/test_summary.py
               env:
                 OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
