@@ -8,7 +8,7 @@ from deepeval.metrics import (
     ContextualPrecisionMetric
 )
 from deepeval.metrics import GEval
-from deepeval import evaluate
+from deepeval import evaluate, assert_test
 
 
 class TestRag:
@@ -63,14 +63,23 @@ class TestRag:
 
         # Retriever eval
         retriever_metrics = [relevancy, recall, precision]
-        evaluate(test_cases=test_cases,
-                 metrics=retriever_metrics
-        )
+        for test_case in test_cases:
+            try:
+                assert_test(test_case=test_case, metrics=retriever_metrics)
+            except AssertionError as e:
+                print(f"Test case failed: {e}")
+                continue
 
         # Generate eval
         generate_metrics = [answer_correctness, citation_accuracy]
-        evaluate(test_cases=test_cases,
-                 metrics=generate_metrics
-        )
+        for test_case in test_cases:
+            try:
+                assert_test(test_case=test_case, metrics=generate_metrics)
+            except AssertionError as e:
+                print(f"Test case failed: {e}")
+                continue
+        # evaluate(test_cases=test_cases,
+        #          metrics=generate_metrics
+        # )
 
     

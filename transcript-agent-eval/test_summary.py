@@ -62,11 +62,13 @@ class TestSummary:
                 input=golden.input,
                 actual_output=summary 
             )
+            assert_test(test_case=summary_test_case, metrics=[self.summary_concision_metric()])
 
             action_item_test_case = LLMTestCase(
                 input=golden.input,
                 actual_output=action_items
             )
+            assert_test(test_case=action_item_test_case, metrics=[self.action_item_check_metric()])
 
             summary_test_cases_list.append(summary_test_case)
             action_item_test_cases_list.append(action_item_test_case)
@@ -103,12 +105,12 @@ class TestSummary:
         # )
 
         # Evaluate all test cases once
-        summary_results = evaluate(
-            test_cases=summary_test_cases,
-            metrics=[self.summary_concision_metric()]
-        )
+        # summary_results = evaluate(
+        #     test_cases=summary_test_cases,
+        #     metrics=[self.summary_concision_metric()]
+        # )
 
-        action_results = evaluate(
-            test_cases=action_item_test_cases,
-            metrics=[self.action_item_check_metric()]
-        )
+        # action_results = evaluate(
+        #     test_cases=action_item_test_cases,
+        #     metrics=[self.action_item_check_metric()]
+        # )
