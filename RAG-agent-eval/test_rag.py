@@ -63,11 +63,13 @@ class TestRag:
 
         # Retriever eval
         retriever_metrics = [relevancy, recall, precision]
+        failures = []
         for test_case in test_cases:
             try:
                 assert_test(test_case=test_case, metrics=retriever_metrics)
             except AssertionError as e:
                 print(f"Test case failed: {e}")
+                failures.append(str(e))
                 continue
 
         # Generate eval
@@ -77,7 +79,12 @@ class TestRag:
                 assert_test(test_case=test_case, metrics=generate_metrics)
             except AssertionError as e:
                 print(f"Test case failed: {e}")
+                failures.append(str(e))
                 continue
+        
+        # Fail the test if any assertions failed
+        if failures:
+            raise AssertionError(f"{len(failures)} test case(s) failed:\n" + "\n".join(failures))
         # evaluate(test_cases=test_cases,
         #          metrics=generate_metrics
         # )
