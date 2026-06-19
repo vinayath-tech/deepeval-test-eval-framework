@@ -37,7 +37,6 @@ class TestRag:
             )
             test_cases.append(test_case)
         
-        print("I am here ####################")
         print(len(test_cases))
         return test_cases
 
@@ -85,8 +84,5 @@ class TestRag:
         # Fail the test if any assertions failed
         if failures:
             raise AssertionError(f"{len(failures)} test case(s) failed:\n" + "\n".join(failures))
-        # evaluate(test_cases=test_cases,
-        #          metrics=generate_metrics
-        # )
 
     

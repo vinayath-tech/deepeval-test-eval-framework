@@ -5,7 +5,6 @@ from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
 from deepeval.evaluate import DisplayConfig
-import pytest
 
 
 class TestSummary:
@@ -92,25 +91,5 @@ class TestSummary:
         get_trancripts = self.transcript_loader()
         dataset = self.dataset_loader(get_trancripts)
 
-        summary_test_cases, action_item_test_cases = self.build_test_case(dataset, summarizer) 
-
-        # summary_concision = self.geval_metric(
-        #     "Summary Concision",
-        #     "Assess whether the summary is accurate & focused only on the essential points of the meeting"
-        # )
-
-        # action_item_check = self.geval_metric(
-        #     "Action item accuracy",
-        #     "Are the action items accurate, complete and clearly reflect the key tasks mentioned in the meeting?"
-        # )
-
-        # Evaluate all test cases once
-        # summary_results = evaluate(
-        #     test_cases=summary_test_cases,
-        #     metrics=[self.summary_concision_metric()]
-        # )
-
-        # action_results = evaluate(
-        #     test_cases=action_item_test_cases,
-        #     metrics=[self.action_item_check_metric()]
-        # )
+        # Execute evaluation
+        self.build_test_case(dataset, summarizer) 
