@@ -10,5 +10,5 @@ faiss-cpu>=1.7.4
 # ── Tests (DeepEval + pytest) ─────────────────────────────────────────────────
 pytest==9.0.3
 requests==2.33.1
-deepeval==4.0.3
+deepeval>=4.0.9
 chardet==5.2.0

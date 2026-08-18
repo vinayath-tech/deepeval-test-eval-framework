@@ -18,6 +18,13 @@ class TestRag:
         goldens = synthesizer.generate_goldens_from_docs(
             document_paths = ["./RAG-agent-eval/dataset/theranos_legacy.txt"]
         )
+        print(f"Generated {len(goldens)} goldens")
+        for i, golden in enumerate(goldens):
+            print(f"\n--- Golden {i} ---")
+            print(f"  input           : {golden.input}")
+            print(f"  expected_output : {golden.expected_output}")
+            print(f"  context         : {golden.context}")
+
         dataset = EvaluationDataset(goldens=goldens)
         return dataset
 
