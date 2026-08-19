@@ -5,7 +5,8 @@ from deepeval.metrics import (
     ToolCorrectnessMetric, 
     StepEfficiencyMetric, 
     PromptAlignmentMetric, 
-    PlanQualityMetric
+    PlanQualityMetric,
+    AnswerRelevancyMetric
 )
 from deepeval.test_case import ToolCall
 from deepeval.tracing import observe
@@ -23,6 +24,7 @@ prompt_alignment = PromptAlignmentMetric(
             ], threshold=0.5, model="gpt-4.1"
 )
 plan_quality = PlanQualityMetric(threshold=0.7, model="gpt-4.1")
+answer_relevancy = AnswerRelevancyMetric(threshold=0.7, model="gpt-4.1")
 
 @observe(name="support agent")
 def support_agent(user_input: str) -> str:
@@ -44,7 +46,7 @@ dataset =  EvaluationDataset(goldens=[
 ])
 
 for golden in dataset.evals_iterator(
-    metrics = [task_completion, tool_correctness, prompt_alignment, plan_quality],
+    metrics = [task_completion, tool_correctness, prompt_alignment, answer_relevancy],
     async_config=AsyncConfig(run_async=False)
 ):
     support_agent(golden.input)
