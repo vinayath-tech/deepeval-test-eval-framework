@@ -43,3 +43,41 @@ jobs:
               run: deepeval test run ./RAG-agent-eval/test_rag.py
               env:
                 OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    eval-order-agent:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+            
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.10"
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - name: Run Deepeval tests
+              run: deepeval test run ./order-agent-eval/test_components_agentic_metrics.py
+              env:
+                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    eval-chat-agent:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+            
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.10"
+
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+
+            - name: Run Deepeval tests
+              run: deepeval test run ./chat-agent-eval/test_chat_agent.py
+              env:
+                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
