@@ -5,13 +5,22 @@ on:
     pull_request:
         branches: [ master ]
 
+# Inherited by every job and step below.
+env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    # Widen DeepEval's judge-call backoff. Defaults (2 attempts, 5s cap) are
+    # too tight to ride out a saturated OpenAI TPM window.
+    DEEPEVAL_RETRY_MAX_ATTEMPTS: "6"
+    DEEPEVAL_RETRY_INITIAL_SECONDS: "2"
+    DEEPEVAL_RETRY_CAP_SECONDS: "60"
+
 jobs:
     eval-summary-agent:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
-            
+
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -20,17 +29,18 @@ jobs:
             - name: Install dependencies
               run: pip install -r requirements.txt
 
+            - name: Show installed versions
+              run: pip freeze | grep -E "deepeval|langchain|openai|pydantic"
+
             - name: Run Deepeval tests
               run: deepeval test run ./transcript-agent-eval/test_summary.py
-              env:
-                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-    
+
     eval-rag-agent:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
-            
+
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -41,15 +51,13 @@ jobs:
 
             - name: Run Deepeval tests
               run: deepeval test run ./RAG-agent-eval/test_rag.py
-              env:
-                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     eval-order-agent:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
-            
+
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -60,15 +68,13 @@ jobs:
 
             - name: Run Deepeval tests
               run: deepeval test run ./order-agent-eval/test_components_agentic_metrics_2.py
-              env:
-                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     eval-chat-agent:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
-            
+
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
@@ -79,5 +85,3 @@ jobs:
 
             - name: Run Deepeval tests
               run: deepeval test run ./chat-agent-eval/test_chat_agent.py
-              env:
-                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
