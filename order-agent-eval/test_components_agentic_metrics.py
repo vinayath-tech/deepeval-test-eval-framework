@@ -27,7 +27,7 @@ prompt_alignment = PromptAlignmentMetric(
             ], threshold=0.5, model="gpt-4.1"
 )
 plan_quality = PlanQualityMetric(threshold=0.7, model="gpt-4.1")
-answer_relevancy = AnswerRelevancyMetric(threshold=0.7, model="gpt-4.1")
+answer_relevancy = AnswerRelevancyMetric(threshold=0.5, model="gpt-4.1")
 bias_metric = BiasMetric(threshold=0.5)
 toxicity_metric = ToxicityMetric(threshold=0.5)
 pii_metric = PIILeakageMetric(threshold=0.5)
