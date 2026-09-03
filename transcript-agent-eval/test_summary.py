@@ -5,6 +5,7 @@ from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
 from deepeval.evaluate import DisplayConfig
+from config import SUMMARIZER_AGENT_MODEL
 
 
 class TestSummary:
@@ -87,7 +88,7 @@ class TestSummary:
 
     def test_eval_summarize(self):
 
-        summarizer = MeetingSummarizer(model="gpt-4.1", temperature=0.5)
+        summarizer = MeetingSummarizer(model=SUMMARIZER_AGENT_MODEL, temperature=0.5)
         get_trancripts = self.transcript_loader()
         dataset = self.dataset_loader(get_trancripts)
 

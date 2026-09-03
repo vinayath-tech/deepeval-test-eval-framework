@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from openai import OpenAI
+from config import SUMMARIZER_AGENT_MODEL
 
 load_dotenv(find_dotenv())
 
@@ -42,7 +43,7 @@ class MeetingSummarizer:
 
       def __init__(
                   self,
-                  model: str="gpt-4.1",
+                  model: str=None,
                   temperature: float = 0.7,
                   api_key = None
 
@@ -50,7 +51,7 @@ class MeetingSummarizer:
             
             """ Initialize summarizer with model configuration"""
 
-            self.model = model
+            self.model = model or SUMMARIZER_AGENT_MODEL
             self.temperature = temperature
             self.api_key = api_key or os.getenv("OPENAI_API_KEY")
 

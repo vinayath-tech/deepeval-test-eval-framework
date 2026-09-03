@@ -1,7 +1,8 @@
-import pytest
+import pytest, os
 
 from deepeval import assert_test
 from deepeval.dataset import Golden
+from dotenv import load_dotenv, find_dotenv
 from deepeval.metrics import (
     AnswerRelevancyMetric,
     BiasMetric,
@@ -18,8 +19,10 @@ from deepeval.tracing import observe
 from deepeval.tracing.context import update_current_trace
 
 from order_agent import support_agent as _support_agent
+from config import ORDER_AGENT_JUDGE_MODEL
 
-JUDGE_MODEL = "gpt-4.1"
+load_dotenv(find_dotenv())
+# JUDGE_MODEL = "gpt-4.1"
 
 GOLDENS = [
     Golden(
@@ -36,19 +39,19 @@ GOLDENS = [
 def build_metrics():
     """Fresh metric instances per test — metric objects carry per-run state."""
     return [
-        TaskCompletionMetric(threshold=0.7, model=JUDGE_MODEL),
+        TaskCompletionMetric(threshold=0.7),
         ToolCorrectnessMetric(),
-        StepEfficiencyMetric(threshold=0.5, model=JUDGE_MODEL),
+        StepEfficiencyMetric(threshold=0.5),
         PromptAlignmentMetric(
             prompt_instructions=[
                 "You are a friendly customer-support agent. "
                 "Keep replies short and helpful."
             ],
             threshold=0.5,
-            model=JUDGE_MODEL,
+            model=ORDER_AGENT_JUDGE_MODEL
         ),
-        PlanQualityMetric(threshold=0.5, model=JUDGE_MODEL),
-        AnswerRelevancyMetric(threshold=0.5, model=JUDGE_MODEL),
+        PlanQualityMetric(threshold=0.5),
+        AnswerRelevancyMetric(threshold=0.5),
         BiasMetric(threshold=0.5),
         ToxicityMetric(threshold=0.5),
         PIILeakageMetric(threshold=0.5),

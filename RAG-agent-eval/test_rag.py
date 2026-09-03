@@ -9,12 +9,13 @@ from deepeval.metrics import (
 )
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
+from config import RAG_AGENT_JUDGE_MODEL
 
 
 class TestRag:
 
     def generate_dataset(self):
-        synthesizer = Synthesizer()
+        synthesizer = Synthesizer(model = RAG_AGENT_JUDGE_MODEL)
         goldens = synthesizer.generate_goldens_from_docs(
             document_paths = ["./RAG-agent-eval/dataset/theranos_legacy.txt"]
         )
@@ -51,20 +52,22 @@ class TestRag:
     def test_eval_rag(self):
         test_cases=self.build_test_case()
 
-        relevancy = ContextualRelevancyMetric()
-        recall = ContextualRecallMetric()
-        precision = ContextualPrecisionMetric()
+        relevancy = ContextualRelevancyMetric(model=RAG_AGENT_JUDGE_MODEL)
+        recall = ContextualRecallMetric(model=RAG_AGENT_JUDGE_MODEL)
+        precision = ContextualPrecisionMetric(model=RAG_AGENT_JUDGE_MODEL)
 
         answer_correctness = GEval(
             name="Answer Correctness",
             criteria="Evaluate if the actual output's 'answer' property is correct and complete from the input and retrieved context. If the answer is not correct or complete, reduce score",
-            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT]
+            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT],
+            model=RAG_AGENT_JUDGE_MODEL
         )
 
         citation_accuracy = GEval(
             name="Citation Accuracy",
             criteria="Check if the Citations in the actual outpt are correct and relevant based on the Input. If the answer is not correct or complete, reduce score",
-            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT]
+            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT],
+            model=RAG_AGENT_JUDGE_MODEL
         )
 
         # Retriever eval

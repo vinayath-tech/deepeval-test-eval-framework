@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
+from langchain.chat_models import init_chat_model
+from config import ORDER_AGENT_MODEL
 
 load_dotenv(find_dotenv())
 
@@ -42,8 +44,8 @@ def get_refund_policy(category: str) -> str:
     return policy
 
 # Agent code
-llm = ChatOpenAI(
-    model="gpt-4.1",
+llm = init_chat_model(
+    model=ORDER_AGENT_MODEL,
     temperature=0
 )
 

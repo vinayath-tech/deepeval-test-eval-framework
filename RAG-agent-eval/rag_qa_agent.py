@@ -1,7 +1,13 @@
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings, OpenAI
+import os
+from dotenv import load_dotenv, find_dotenv
+# from langchain_openai import OpenAIEmbeddings, OpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain.chat_models import init_chat_model
+from langchain.embeddings import init_embeddings
+from config import RAG_AGENT_MODEL, RAG_EMBEDDING_MODEL
 
+load_dotenv(find_dotenv())
 
 class RAGAgent:
 
@@ -15,12 +21,13 @@ class RAGAgent:
             k: int = 2
     ):
         self.document_paths = document_paths
-        self.embedding_model = embedding_model or OpenAIEmbeddings()
+        self.embedding_model = embedding_model or init_embeddings(RAG_EMBEDDING_MODEL)
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.vector_store_class = vector_store_class
         self.k = k
         self.vector_store = self._load_vector_store()
+        self.llm = init_chat_model(RAG_AGENT_MODEL, temperature=0)
 
 
     def _load_vector_store(self):
@@ -45,14 +52,15 @@ class RAGAgent:
         return context
     
     def generate(self, query: str, retrieved_docs: list):
-        # retrieved_docs = self.retrieve("How many blood tests can you perform and how much blood do you need?")
+        retrieved_docs = self.retrieve("How many blood tests can you perform and how much blood do you need?")
         context = "\n".join(retrieved_docs)
-        model = OpenAI(temperature=0)
+        # model = OpenAI(temperature=0)
         prompt = ("Answer the query using the context below.\n\nContext:\n{context}\n\nQuery:\n{query}"
             "Only use information from the context. If nothing relevant is found, respond with: 'No relevant information available.'"
         )
         prompt = prompt.format(context = context, query = query)
-        return model.invoke(prompt)
+        # return model.invoke(prompt)
+        return self.llm.invoke(prompt).content
     
     def answer(self, query:str) -> tuple[str, list[str]]:
         retrieved_docs = retreiver.retrieve(query)
