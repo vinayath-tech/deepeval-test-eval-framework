@@ -9,7 +9,7 @@ An LLM evaluation framework built on [DeepEval](https://github.com/confident-ai/
 | [`order-agent-eval`](order-agent-eval/) | A **single-turn tool-calling** customer-support agent answering order-status and refund questions | Agentic: `Task Completion`, `Tool Correctness`, `Prompt Alignment`, `Answer Relevancy`; Safety: `Bias`, `Toxicity`, `PII Leakage`; plus `Correctness` (G-Eval) |
 | [`chat-agent-eval`](chat-agent-eval/) | A **multi-turn** ShopEasy support chatbot that keeps history across turns | `Turn Relevancy`, `Knowledge Retention`, `Conversation Completeness`, plus `Correctness` (Conversational G-Eval) |
 
-Both the agents under test and DeepEval's LLM judges run on OpenAI models.
+Both the agents under test and DeepEval's LLM judges default to OpenAI models, but every model is configurable from `.env` — including non-OpenAI providers. See [Model configuration](#model-configuration).
 
 ### Single-turn vs multi-turn
 
@@ -48,6 +48,8 @@ deepeval-test-eval-framework/
 │   └── test_chat_agent.py     # conversational metrics over a 4-turn dialogue
 ├── utils/
 │   └── generate_report.py     # builds test_report.html from the latest run
+├── config.py                  # central model configuration (reads .env)
+├── pytest.ini                 # makes config.py importable from every suite
 ├── .deepeval/                 # DeepEval cache + latest run results (auto-generated)
 ├── requirements.txt
 └── test_report.html           # generated report (output)
@@ -80,7 +82,9 @@ Create a `.env` file in the repo root:
 OPENAI_API_KEY=sk-...your-key...
 ```
 
-The agents load this automatically via `python-dotenv`. DeepEval also reads `OPENAI_API_KEY` for its judge models. (A `CONFIDENT_API_KEY` is optional — see [Viewing traces](#3-viewing-traces-optional).)
+That is the only **required** variable. Everything else — which model each agent and judge runs on — is optional and covered in [Model configuration](#model-configuration) below; sensible defaults apply if you set nothing.
+
+`.env` is gitignored and must stay that way. In CI, set variables through the workflow instead — see [Running in CI](#running-in-ci). (A `CONFIDENT_API_KEY` is optional — see [Viewing traces](#3-viewing-traces-optional).)
 
 ### 3. Windows console encoding
 
@@ -89,6 +93,118 @@ DeepEval's progress output contains emoji. On a legacy Windows codepage this rai
 ```powershell
 $env:PYTHONIOENCODING = "utf-8"
 ```
+
+---
+
+## Model configuration
+
+Every model this framework uses is declared in one place: [`config.py`](config.py). No model name is hardcoded inside a suite, so you can point the whole framework at different models — or a different provider entirely — **without editing Python**.
+
+### How it works
+
+`config.py` reads environment variables and supplies a default for each:
+
+```python
+ORDER_AGENT_MODEL = os.getenv("ORDER_AGENT_MODEL", "openai:gpt-4.1-mini")
+```
+
+Set the variable in `.env` and it wins; set nothing and the default applies. Cloning the repo and running with only an `OPENAI_API_KEY` works out of the box.
+
+`pytest.ini` contains the two lines that make this importable from every suite:
+
+```ini
+[pytest]
+pythonpath = .
+```
+
+Pytest normally only puts a test file's *own* folder on `sys.path`, so `from config import ...` would fail from inside `order-agent-eval/` without it.
+
+### The variables
+
+| Variable | Default | Format | Drives |
+| --- | --- | --- | --- |
+| `ORDER_AGENT_MODEL` | `openai:gpt-4.1-mini` | `provider:model` | the order agent |
+| `ORDER_AGENT_JUDGE_MODEL` | `gpt-4.1-mini` | bare name | order-agent metrics |
+| `RAG_AGENT_MODEL` | `openai:gpt-4.1-mini` | `provider:model` | the RAG generator |
+| `RAG_EMBEDDING_MODEL` | `openai:text-embedding-3-small` | `provider:model` | the RAG embedder |
+| `RAG_AGENT_JUDGE_MODEL` | `gpt-4.1-mini` | bare name | RAG metrics + `Synthesizer` |
+| `SUMMARIZER_AGENT_MODEL` | `gpt-4.1-mini` | bare name | the summarizer **and** its G-Eval judge |
+| `CHAT_AGENT_MODEL` | `gpt-4.1-mini` | bare name | the chatbot **and** its conversational judges |
+
+### Two formats: the easy mistake
+
+The format depends on **who reads the value**, not on which suite it belongs to:
+
+| Consumer | Format | Example |
+| --- | --- | --- |
+| LangChain (`init_chat_model`, `init_embeddings`) | `provider:model` | `openai:gpt-4.1-mini` |
+| OpenAI SDK and all DeepEval metrics | bare name | `gpt-4.1-mini` |
+
+The `provider:` prefix is LangChain's way of choosing which integration class to build. The OpenAI SDK has no such concept and forwards the string as a literal model id — so passing `openai:gpt-4.1-mini` to a metric fails with:
+
+```
+openai.NotFoundError: 404 - The model `openai:gpt-4.1-mini` does not exist
+```
+
+If you see that, you've handed a `provider:model` value to something that wanted a bare name.
+
+### Using a non-OpenAI provider
+
+**LangChain-based agents** (`order_agent.py`, `rag_qa_agent.py`) accept any provider `init_chat_model` supports — just change the prefix:
+
+```dotenv
+ORDER_AGENT_MODEL=ollama:llama3.2
+RAG_EMBEDDING_MODEL=ollama:nomic-embed-text
+```
+
+Each provider needs its integration package installed. `langchain-openai` and `langchain-ollama` ship in `requirements.txt`; others are one install away:
+
+```powershell
+pip install langchain-anthropic       # anthropic:claude-...
+pip install langchain-google-genai    # google_genai:gemini-...
+```
+
+`init_chat_model` names the missing package if you skip this, so the failure is self-explaining.
+
+**DeepEval judges** can be pointed at any provider DeepEval supports, via its own CLI — no code change:
+
+```powershell
+deepeval set-ollama --model llama3.2
+deepeval set-anthropic --model claude-sonnet-4-5
+deepeval set-litellm --model ...
+```
+
+Note that a metric constructed with an explicit `model=` argument ignores this global setting. Most metrics in this repo pass the suite's judge variable explicitly, which is deliberate — per-suite control — but it means the CLI switch above only affects metrics that *don't* specify a model.
+
+### Known rough edge
+
+`SUMMARIZER_AGENT_MODEL` and `CHAT_AGENT_MODEL` each drive both an agent *and* its judges, because those two agents call the OpenAI SDK directly and need bare names anyway. The order and RAG suites keep them separate (`*_AGENT_MODEL` vs `*_AGENT_JUDGE_MODEL`). Splitting the other two would make the scheme uniform.
+
+---
+
+## Running in CI
+
+**Never commit `.env` or `.env.local`.** GitHub Actions does not read `.env` files — it sets real environment variables in the runner, and `config.py`'s `os.getenv` picks those up directly. `load_dotenv()` is a no-op when no file is present, so the same code works in both places.
+
+Split variables by sensitivity in [`.github/workflows/eval-ci.yml`](.github/workflows/eval-ci.yml):
+
+```yaml
+env:
+    # secret — stored in repo Settings → Secrets and variables → Actions
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    # not secret — plain values, visible and reviewable
+    ORDER_AGENT_MODEL: "openai:gpt-4.1-mini"
+    ORDER_AGENT_JUDGE_MODEL: "gpt-4.1-mini"
+
+    # widen judge-call backoff; defaults (2 attempts, 5s cap) are too tight
+    # to ride out a saturated OpenAI TPM window
+    DEEPEVAL_RETRY_MAX_ATTEMPTS: "6"
+    DEEPEVAL_RETRY_INITIAL_SECONDS: "2"
+    DEEPEVAL_RETRY_CAP_SECONDS: "60"
+```
+
+A workflow-level `env:` block is inherited by every job and step, so it only needs declaring once. Model variables can be omitted entirely — `config.py`'s defaults apply — but listing them makes CI's configuration explicit rather than implied.
 
 ---
 
@@ -309,6 +425,8 @@ deepeval view           # opens the latest run in the dashboard
 - **`UnicodeEncodeError: 'charmap' codec can't encode character`** — Windows console encoding. Set `$env:PYTHONIOENCODING = "utf-8"`. This error appears *after* the real one, during `rich` teardown; scroll up to find the actual failure.
 - **`MissingTestCaseParamsError: 'expected_tools' cannot be None`** — the golden's ground truth never reached the trace. Forward it with `update_current_trace(expected_tools=golden.expected_tools)` (see [How the tracing is wired](#how-the-tracing-is-wired)).
 - **A single-turn metric rejects your test case** — single-turn metrics (`SingleTurnParams`) cannot score a `ConversationalTestCase`. Use the multi-turn equivalent: `ConversationalGEval` instead of `GEval`, and `MultiTurnParams` for `evaluation_params`.
+- **`openai.NotFoundError: 404 - The model 'openai:gpt-4.1-mini' does not exist`** — a `provider:model` value was passed where a bare model name was expected. Metrics and the raw OpenAI SDK want `gpt-4.1-mini`; only LangChain's `init_chat_model` / `init_embeddings` understand the `openai:` prefix. See [Two formats](#two-formats-the-easy-mistake).
+- **`ModuleNotFoundError: No module named 'config'`** — `pytest.ini` is missing or lacks `pythonpath = .`. Pytest only puts a test file's own folder on `sys.path`, so the repo root has to be added explicitly.
 - **`TypeError: unhashable type: 'ToolMessage'`** — DeepEval older than `4.0.9`. Run `pip install --upgrade deepeval`.
 - **`429 ... rate_limit_exceeded` on TPM** — a *speed* limit, not a billing problem (that one reports `insufficient_quota`). Adding credit does not raise TPM; the limit comes from your usage tier. Throttle with `AsyncConfig` instead.
 - **An evaluation fires during pytest collection** — a suite whose loop sits at module level runs on import. Keep evaluation code inside a `def test_...()` function, or invoke that file with `python`.
