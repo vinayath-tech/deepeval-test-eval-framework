@@ -82,7 +82,8 @@ class TestSummary:
             name = name,
             criteria = criteria,
             threshold=0.7,
-            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT]
+            evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
+            model=SUMMARIZER_AGENT_MODEL
         )
 
 
