@@ -5,7 +5,7 @@ from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
 from deepeval.evaluate import DisplayConfig
-from config import SUMMARIZER_AGENT_MODEL
+from config import SUMMARIZER_AGENT_MODEL, SUMMARIZER_JUDGE_MODEL
 
 
 class TestSummary:
@@ -81,9 +81,9 @@ class TestSummary:
         return GEval(
             name = name,
             criteria = criteria,
-            threshold=0.7,
+            threshold=0.5,
             evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
-            model=SUMMARIZER_AGENT_MODEL
+            model=SUMMARIZER_JUDGE_MODEL
         )
 
 

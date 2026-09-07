@@ -2,6 +2,7 @@ from deepeval.test_case import LLMTestCase, LLMTestCaseParams
 from deepeval.dataset import EvaluationDataset
 from rag_qa_agent import RAGAgent
 from deepeval.synthesizer import Synthesizer
+from deepeval.synthesizer.config import ContextConstructionConfig
 from deepeval.metrics import (
     ContextualRelevancyMetric,
     ContextualRecallMetric,
@@ -9,7 +10,7 @@ from deepeval.metrics import (
 )
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
-from config import RAG_AGENT_JUDGE_MODEL
+from config import RAG_AGENT_JUDGE_MODEL, RAG_SYNTH_EMBEDDER
 
 
 class TestRag:
@@ -17,7 +18,12 @@ class TestRag:
     def generate_dataset(self):
         synthesizer = Synthesizer(model = RAG_AGENT_JUDGE_MODEL)
         goldens = synthesizer.generate_goldens_from_docs(
-            document_paths = ["./RAG-agent-eval/dataset/theranos_legacy.txt"]
+            document_paths = ["./RAG-agent-eval/dataset/theranos_legacy.txt"],
+            context_construction_config = ContextConstructionConfig(
+                embedder=RAG_SYNTH_EMBEDDER,
+                critic_model=RAG_AGENT_JUDGE_MODEL,
+                chunk_size=400
+            )
         )
         print(f"Generated {len(goldens)} goldens")
         for i, golden in enumerate(goldens):

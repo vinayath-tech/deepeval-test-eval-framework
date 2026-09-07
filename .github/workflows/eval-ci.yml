@@ -2,21 +2,38 @@ name: 'Deepeval Agent evaluation'
 on:
     push:
         branches: [ master ]
-    pull_request:
-        branches: [ master ]
 
 # Inherited by every job and step below.
 env:
     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    # Ollama env variables
+    OLLAMA_BASE_URL: http://localhost:11434
+    OLLAMA_KEEP_ALIVE: "30m"
+    OLLAMA_NUM_PARALLEL: "1"
+
     # Widen DeepEval's judge-call backoff. Defaults (2 attempts, 5s cap) are
     # too tight to ride out a saturated OpenAI TPM window.
-    DEEPEVAL_RETRY_MAX_ATTEMPTS: "6"
+    DEEPEVAL_PER_TASK_TIMEOUT_SECONDS: "1800"
+    DEEPEVAL_PER_ATTEMPT_TIMEOUT_SECONDS: "900"
+    DEEPEVAL_RETRY_MAX_ATTEMPTS: "3"
     DEEPEVAL_RETRY_INITIAL_SECONDS: "2"
     DEEPEVAL_RETRY_CAP_SECONDS: "60"
+    DEEPEVAL_LOG_STACK_TRACES: "1"   # synthesizer swallows exceptions without this
+
 
 jobs:
-    eval-summary-agent:
+    eval:
         runs-on: ubuntu-latest
+        timeout-minutes: 120
+        strategy:
+          fail-fast: true
+          matrix:
+            include:
+              - { name: transcript, path: ./transcript-agent-eval/test_summary.py }
+              - { name: order, path: ./order-agent-eval/test_components_agentic_metrics.py }
+              - { name: chat, path: ./chat-agent-eval/test_chat_agent.py }
+              - { name: rag, path: ./RAG-agent-eval/test_rag.py }
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
@@ -25,63 +42,92 @@ jobs:
               uses: actions/setup-python@v4
               with:
                 python-version: "3.10"
+                cache: pip
 
             - name: Install dependencies
               run: pip install -r requirements.txt
 
-            - name: Show installed versions
-              run: pip freeze | grep -E "deepeval|langchain|openai|pydantic"
-
-            - name: Run Deepeval tests
-              run: deepeval test run ./transcript-agent-eval/test_summary.py
-
-    eval-rag-agent:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v4
-
-            - name: Set up Python
-              uses: actions/setup-python@v4
+            # Restore before pulling so a warm cache makes the pulls no-ops.
+            # One shared key across all four jobs => ~3GB stored once, not four times.
+            - name: Cache Ollama models
+              uses: actions/cache@v4
               with:
-                python-version: "3.10"
+                path: ~/.ollama/models
+                key: ollama-qwen2.5-3b-nomic-v2moe-v1
 
-            - name: Install dependencies
-              run: pip install -r requirements.txt
+            - name: Install and start Ollama
+              run: |
+                curl -fsSL https://ollama.com/install.sh | sh
+                # The installer may or may not start a service; make sure one is listening.
+                (pgrep -x ollama >/dev/null || nohup ollama serve > ollama.log 2>&1 &)
+                for i in $(seq 1 60); do
+                  curl -sf http://localhost:11434/api/tags >/dev/null && break
+                  sleep 2
+                done
+                curl -sf http://localhost:11434/api/tags >/dev/null \
+                  || { echo "Ollama failed to start"; cat ollama.log; exit 1; }
 
-            - name: Run Deepeval tests
-              run: deepeval test run ./RAG-agent-eval/test_rag.py
+            - name: Pull models
+              run: |
+                ollama pull qwen2.5:3b
+                ollama pull nomic-embed-text-v2-moe
 
-    eval-order-agent:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v4
+            # Pay the cold-start here, not inside a timed judge call.
+            - name: Warm model
+              run: |
+                curl -s http://localhost:11434/api/generate \
+                  -d '{"model":"qwen2.5:3b","prompt":"hi","stream":false}' > /dev/null
 
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: "3.10"
+            - name: Run evals — ${{ matrix.name }}
+              run: deepeval test run ${{ matrix.path }}
 
-            - name: Install dependencies
-              run: pip install -r requirements.txt
+    # eval-rag-agent:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout repo
+    #           uses: actions/checkout@v4
 
-            - name: Run Deepeval tests
-              run: deepeval test run ./order-agent-eval/test_components_agentic_metrics.py
+    #         - name: Set up Python
+    #           uses: actions/setup-python@v4
+    #           with:
+    #             python-version: "3.10"
 
-    eval-chat-agent:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v4
+    #         - name: Install dependencies
+    #           run: pip install -r requirements.txt
 
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: "3.10"
+    #         - name: Run Deepeval tests
+    #           run: deepeval test run ./RAG-agent-eval/test_rag.py
 
-            - name: Install dependencies
-              run: pip install -r requirements.txt
+    # eval-order-agent:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout repo
+    #           uses: actions/checkout@v4
 
-            - name: Run Deepeval tests
-              run: deepeval test run ./chat-agent-eval/test_chat_agent.py
+    #         - name: Set up Python
+    #           uses: actions/setup-python@v4
+    #           with:
+    #             python-version: "3.10"
+
+    #         - name: Install dependencies
+    #           run: pip install -r requirements.txt
+
+    #         - name: Run Deepeval tests
+    #           run: deepeval test run ./order-agent-eval/test_components_agentic_metrics.py
+
+    # eval-chat-agent:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout repo
+    #           uses: actions/checkout@v4
+
+    #         - name: Set up Python
+    #           uses: actions/setup-python@v4
+    #           with:
+    #             python-version: "3.10"
+
+    #         - name: Install dependencies
+    #           run: pip install -r requirements.txt
+
+    #         - name: Run Deepeval tests
+    #           run: deepeval test run ./chat-agent-eval/test_chat_agent.py

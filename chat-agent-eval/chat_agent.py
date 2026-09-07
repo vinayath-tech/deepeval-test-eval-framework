@@ -32,9 +32,12 @@ load_dotenv()
 
 import json
 from openai import OpenAI
-from config import CHAT_AGENT_MODEL
+from config import CHAT_AGENT_MODEL, OLLAMA_OPENAI_BASE_URL
 
-client = OpenAI()
+client = OpenAI(
+    base_url=OLLAMA_OPENAI_BASE_URL,
+    api_key="ollama"
+)
 
 # ---------------------------------------------------------------------------
 # In-memory data (same as agent_plain.py)

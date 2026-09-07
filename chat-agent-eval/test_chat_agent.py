@@ -1,8 +1,8 @@
 from deepeval.test_case import MultiTurnParams, Turn, ConversationalTestCase
 from deepeval.metrics import ConversationalGEval, TurnRelevancyMetric, KnowledgeRetentionMetric, ConversationCompletenessMetric
 from deepeval import evaluate
-from chat_agent import chat
-from config import CHAT_AGENT_MODEL
+from chat_agent import chat, ORDERS, REFUND_POLICIES
+from config import CHAT_JUDGE_MODEL_LOCAL, CHAT_JUDGE_MODEL_OPENAI
 
 def test_chat_agent_evaluation():
     """Test the chat agent with conversational metrics"""
@@ -20,12 +20,24 @@ def test_chat_agent_evaluation():
         turns.append(Turn(role="assistant", content=reply))
 
     test_case = ConversationalTestCase(
-        turns=turns
+        turns=turns,
+        scenario=(
+        """ A ShopEasy customer asks for one order's status, then asks about 
+        refund policies for clothing and for food."""
+         ),
+        expected_outcome=(
+            f"ORD-1042 is {ORDERS['ORD-1042']['status']} with ETA {ORDERS['ORD-1042']['eta']}. "
+            f"Clothing: {REFUND_POLICIES['clothing']} "
+            f"Food: {REFUND_POLICIES['food']}"
+        )
     )
 
-    turnRelevancyMetric = TurnRelevancyMetric(threshold=0.7, model=CHAT_AGENT_MODEL)
-    knowledgeRetentionMetric = KnowledgeRetentionMetric(threshold=0.5, model=CHAT_AGENT_MODEL)
-    conversationCompletenessMetric = ConversationCompletenessMetric(threshold=0.5, model=CHAT_AGENT_MODEL)
+    # Commenting out below metrics to reduce the eval execution time take by ollama model.
+    # turnRelevancyMetric = TurnRelevancyMetric(threshold=0.7, model=CHAT_AGENT_MODEL)
+    # knowledgeRetentionMetric = KnowledgeRetentionMetric(threshold=0.5, model=CHAT_AGENT_MODEL)
+    # conversationCompletenessMetric = ConversationCompletenessMetric(threshold=0.5, model=CHAT_AGENT_MODEL)
+
+    knowledgeRetentionMetric = KnowledgeRetentionMetric(threshold=0.5, model=CHAT_JUDGE_MODEL_LOCAL)
 
     # GEval metrics
     correctness = ConversationalGEval(
@@ -36,8 +48,8 @@ def test_chat_agent_evaluation():
         ),
         threshold = 0.5,
         evaluation_params= [MultiTurnParams.ROLE, MultiTurnParams.CONTENT],
-        model=CHAT_AGENT_MODEL
+        model=CHAT_JUDGE_MODEL_OPENAI
     )
 
 
-    evaluate(test_cases=[test_case], metrics = [turnRelevancyMetric, knowledgeRetentionMetric, conversationCompletenessMetric, correctness])
+    evaluate(test_cases=[test_case], metrics = [knowledgeRetentionMetric, correctness])

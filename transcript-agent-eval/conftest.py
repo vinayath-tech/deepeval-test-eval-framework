@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from openai import OpenAI
-from config import SUMMARIZER_AGENT_MODEL
+from config import SUMMARIZER_AGENT_MODEL, OLLAMA_OPENAI_BASE_URL
 
 load_dotenv(find_dotenv())
 
@@ -45,7 +45,8 @@ class MeetingSummarizer:
                   self,
                   model: str=None,
                   temperature: float = 0.7,
-                  api_key = None
+                  api_key = None,
+                  base_url = None
 
       ):
             
@@ -56,7 +57,10 @@ class MeetingSummarizer:
             self.api_key = api_key or os.getenv("OPENAI_API_KEY")
 
             # Initialize OpenAI client
-            self.client=OpenAI(api_key=self.api_key)
+            self.client=OpenAI(
+                  base_url = base_url or OLLAMA_OPENAI_BASE_URL,
+                  api_key = self.api_key or "ollama"
+            )
 
             # Initialize prompt manager
             self.prompt_manager = PromptManager()
