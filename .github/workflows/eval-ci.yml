@@ -27,7 +27,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 120
         strategy:
-          fail-fast: true
+          fail-fast: false
           matrix:
             include:
               - { name: transcript, path: ./transcript-agent-eval/test_summary.py }

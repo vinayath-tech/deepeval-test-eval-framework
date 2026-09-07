@@ -15,11 +15,12 @@ ORDER_AGENT_JUDGE_MODEL = OllamaModel(
 )
 
 SUMMARIZER_AGENT_MODEL = os.getenv("SUMMARIZER_AGENT_MODEL", "qwen2.5:3b")
-SUMMARIZER_JUDGE_MODEL = OllamaModel(
+SUMMARIZER_JUDGE_MODEL_LOCAL = OllamaModel(
     model = os.getenv("SUMMARIZER_JUDGE_MODEL", "qwen2.5:3b"),
     base_url= OLLAMA_BASE_URL,
     temperature=0
 )
+SUMMARIZER_JUDGE_MODEL_OPENAI = os.getenv("SUMMARIZER_JUDGE_MODEL_OPENAI", "gpt-4.1-mini")
 
 RAG_AGENT_MODEL = os.getenv("RAG_AGENT_MODEL", "ollama:qwen2.5:3b")
 RAG_EMBEDDING_MODEL = os.getenv("RAG_EMBEDDING_MODEL", "ollama:nomic-embed-text-v2-moe")
