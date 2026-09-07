@@ -19,7 +19,7 @@ from deepeval.tracing import observe
 from deepeval.tracing.context import update_current_trace
 
 from order_agent import support_agent as _support_agent
-from config import ORDER_AGENT_JUDGE_MODEL
+from config import ORDER_AGENT_JUDGE_MODEL_LOCAL, ORDER_AGENT_JUDGE_MODEL_OPENAI
 
 load_dotenv(find_dotenv())
 # JUDGE_MODEL = "gpt-4.1"
@@ -61,9 +61,9 @@ GOLDENS = [
 def build_metrics():
     """Fresh metric instances per test — metric objects carry per-run state."""
     return [
-        TaskCompletionMetric(threshold=0.7, model=ORDER_AGENT_JUDGE_MODEL),
+        TaskCompletionMetric(threshold=0.7, model=ORDER_AGENT_JUDGE_MODEL_OPENAI),
         ToolCorrectnessMetric(),
-        AnswerRelevancyMetric(threshold=0.5, model=ORDER_AGENT_JUDGE_MODEL)
+        AnswerRelevancyMetric(threshold=0.5, model=ORDER_AGENT_JUDGE_MODEL_OPENAI)
     ]
 
 

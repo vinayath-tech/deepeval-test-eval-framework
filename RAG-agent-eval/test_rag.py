@@ -10,18 +10,18 @@ from deepeval.metrics import (
 )
 from deepeval.metrics import GEval
 from deepeval import evaluate, assert_test
-from config import RAG_AGENT_JUDGE_MODEL, RAG_SYNTH_EMBEDDER
+from config import RAG_AGENT_JUDGE_MODEL_OPENAI, RAG_SYNTH_EMBEDDER, RAG_AGENT_JUDGE_MODEL_LOCAL
 
 
 class TestRag:
 
     def generate_dataset(self):
-        synthesizer = Synthesizer(model = RAG_AGENT_JUDGE_MODEL)
+        synthesizer = Synthesizer(model = RAG_AGENT_JUDGE_MODEL_OPENAI)
         goldens = synthesizer.generate_goldens_from_docs(
             document_paths = ["./RAG-agent-eval/dataset/theranos_legacy.txt"],
             context_construction_config = ContextConstructionConfig(
                 embedder=RAG_SYNTH_EMBEDDER,
-                critic_model=RAG_AGENT_JUDGE_MODEL,
+                critic_model=RAG_AGENT_JUDGE_MODEL_OPENAI,
                 chunk_size=400
             )
         )
@@ -58,22 +58,22 @@ class TestRag:
     def test_eval_rag(self):
         test_cases=self.build_test_case()
 
-        relevancy = ContextualRelevancyMetric(model=RAG_AGENT_JUDGE_MODEL)
-        recall = ContextualRecallMetric(model=RAG_AGENT_JUDGE_MODEL)
-        precision = ContextualPrecisionMetric(model=RAG_AGENT_JUDGE_MODEL)
+        relevancy = ContextualRelevancyMetric(model=RAG_AGENT_JUDGE_MODEL_OPENAI)
+        recall = ContextualRecallMetric(model=RAG_AGENT_JUDGE_MODEL_OPENAI)
+        precision = ContextualPrecisionMetric(model=RAG_AGENT_JUDGE_MODEL_OPENAI)
 
         answer_correctness = GEval(
             name="Answer Correctness",
             criteria="Evaluate if the actual output's 'answer' property is correct and complete from the input and retrieved context. If the answer is not correct or complete, reduce score",
             evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT],
-            model=RAG_AGENT_JUDGE_MODEL
+            model=RAG_AGENT_JUDGE_MODEL_OPENAI
         )
 
         citation_accuracy = GEval(
             name="Citation Accuracy",
             criteria="Check if the Citations in the actual outpt are correct and relevant based on the Input. If the answer is not correct or complete, reduce score",
             evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT, LLMTestCaseParams.RETRIEVAL_CONTEXT],
-            model=RAG_AGENT_JUDGE_MODEL
+            model=RAG_AGENT_JUDGE_MODEL_OPENAI
         )
 
         # Retriever eval
