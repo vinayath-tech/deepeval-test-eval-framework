@@ -1,6 +1,6 @@
 {
-  "release_run_id": "44855ccd-e015-41d0-922c-a3a325cfc9b7",
-  "timestamp": "2026-09-14T21:26:39.223377+00:00",
+  "release_run_id": "3f5feace-fc32-4208-9c86-5958932a2e05",
+  "timestamp": "2026-09-15T13:24:38.002183+00:00",
   "method": {
     "chapter": "Jason Arbon Chapter 1",
     "runs_per_case": 5,
@@ -12,7 +12,7 @@
     "temperature": 0.5
   },
   "judge": {
-    "model": "<deepeval.models.llms.ollama_model.OllamaModel object at 0x0000027CE76B3750>"
+    "model": "<deepeval.models.llms.ollama_model.OllamaModel object at 0x000001CB2FE43750>"
   },
   "cases": [
     {
@@ -28,38 +28,38 @@
       },
       "action_item_statistics": {
         "count": 5,
-        "mean": 8.0,
-        "median": 8.0,
-        "min": 6.0,
-        "max": 10.0,
-        "std_dev": 1.41,
-        "pass_rate": 0.8
+        "mean": 6.6,
+        "median": 7.0,
+        "min": 5.0,
+        "max": 8.0,
+        "std_dev": 1.14,
+        "pass_rate": 0.6
       },
       "runs": [
         {
           "run_number": 1,
           "summary": {
-            "score": 5.0,
+            "score": 2.0,
             "passed": false,
-            "output": "Ethan and Maya discuss issues with the customer support assistant, noting mixed feedback on response speed and answer quality. They identify problems stemming from vague or incorrect summaries and consider switching to a different model like Claude 3, which is slower but more reliable. They decide to keep GPT-4o as the main model but implement Claude as a fallback for uncertain responses. Maya suggests using embedding similarity to measure confidence and proposes prompt tuning with anonymized example replies to improve tone. They also discuss UI handling for low-confidence responses, favoring a fallback messaging system. They agree to prioritize developing a similarity metric and testing a hybrid model approach, with a follow-up meeting planned."
+            "output": "Ethan and Maya discuss issues with the customer support assistant, noting mixed feedback on response speed and answer quality. They identify potential problems with prompt engineering and model quality. Maya suggests using Claude 3 as a fallback model to improve response quality at the cost of increased latency. They also discuss improving the assistant's confidence signals and UI handling low-confidence responses. Ethan proposes a hybrid model approach using GPT-4o and Claude 3, with Maya planning to implement similarity scoring and a fallback messaging system. They plan to regroup next week to review progress."
           },
           "action_items": {
             "score": 8.0,
             "passed": true,
-            "output": "{\n    \"individual_actions\": {\n        \"Ethan\": [\n            \"Discuss UX feedback and potential improvements with design\",\n            \"Explore options for prompting and fine-tuning the model\",\n            \"Plan and implement similarity scoring and hybrid model approach\",\n            \"Set up a test run for the hybrid model approach over the next few days\"\n        ],\n        \"Maya\": [\n            \"Work on similarity scoring\",\n            \"Propose and implement fallback messaging for low-confidence cases\",\n            \"Propose and implement a two-pass system with GPT-4o and Claude\"\n        ]\n    },\n    \"team_actions\": [\n        \"Plan and implement similarity scoring and hybrid model approach\",\n        \"Set up a test run for the hybrid model approach over the next few days\",\n        \"Propose and implement fallback messaging for low-confidence cases\",\n        \"Propose and implement a two-pass system with GPT-4o and Claude\"\n    ],\n    \"entities\": [\n        \"Ethan\",\n        \"Maya\"\n    ]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Ethan\": [\n        \"Discuss UX feedback with users\",\n        \"Explore using embeddings for confidence signal\",\n        \"Work on fallback messaging for low-confidence cases\",\n        \"Sync with design on fallback UX messaging\",\n        \"Prioritize building similarity metric\",\n        \"Set up test run for GPT-4o and Claude hybrid model approach\"\n    ],\n    \"Maya\": [\n        \"Implement prompt tuning with anonymized example replies\",\n        \"Create domain-specific prompts\",\n        \"Work on two-pass system with GPT-4o and Claude\",\n        \"Set up test run for hybrid model approach\",\n        \"Prioritize building similarity metric\",\n        \"Set up test run for hybrid model approach\"\n    ]\n},\n\"team_actions\": [\n    \"Explore using embeddings for confidence signal\",\n    \"Implement prompt tuning with anonymized example replies\",\n    \"Create domain-specific prompts\",\n    \"Work on two-pass system with GPT-4o and Claude\",\n    \"Set up test run for hybrid model approach\"\n],\n\"entities\": [\n    \"Ethan\",\n    \"Maya\",\n    \"GPT-4o\",\n    \"Claude\"\n]\n}"
           }
         },
         {
           "run_number": 2,
           "summary": {
-            "score": 2.0,
+            "score": 5.0,
             "passed": false,
-            "output": "Ethan and Maya discuss issues with the customer support assistant, including response speed and accuracy. They identify problems stemming from both prompt engineering and the model itself. Maya suggests keeping GPT-4o as the main model due to its speed, but implementing Claude as a fallback for uncertain responses. They also plan to use embedding similarity to detect low-quality responses and fine-tune the prompt for better human-like responses. For user experience, they propose adding fallback messaging when the assistant's confidence is low. Ethan and Maya agree to prioritize building a similarity scoring system and testing a hybrid model approach."
+            "output": "Ethan and Maya discuss issues with the customer support assistant, noting problems with response speed and accuracy. They consider using Claude 3 as a fallback model due to its better grounding but slower response times. Maya suggests implementing a two-pass system with GPT-4o for initial responses and Claude for uncertain or incorrect answers. They also discuss improving the assistant's tone and adding fallback messaging for low-confidence responses. Ethan agrees to work on a similarity scoring metric and set up a test run for the hybrid model approach."
           },
           "action_items": {
-            "score": 8.0,
-            "passed": true,
-            "output": "{\n\"individual_actions\": {\n    \"Ethan\": [\"Discuss UX feedback with design team\", \"Explore embedding similarity for confidence signals\", \"Work on similarity metric\", \"Set up test run for hybrid model approach\"],\n    \"Maya\": [\"Work on similarity metric\", \"Set up test run for hybrid model approach\", \"Advocate for fallback messaging\", \"Focus on prompt tuning\"]\n},\n\"team_actions\": [\"Sync with design team on fallback UX messaging\", \"Explore embedding similarity for confidence signals\", \"Work on similarity metric\", \"Set up test run for hybrid model approach\", \"Advocate for fallback messaging\", \"Focus on prompt tuning\"],\n\"entities\": [\"Ethan\", \"Maya\", \"UX feedback\", \"Confidence signals\", \"Embeddings\", \"Fallback messaging\", \"Prompt tuning\"]\n}"
+            "score": 5.0,
+            "passed": false,
+            "output": "{\n    \"individual_actions\": {\n        \"Ethan\": [\"Discuss UX feedback, propose fallback messaging, coordinate with design team\"],\n        \"Maya\": [\"Propose fine-tuning prompt, build similarity scoring, set up test run for hybrid model\"]\n    },\n    \"team_actions\": [\"Propose fine-tuning prompt\", \"Build similarity scoring\", \"Set up test run for hybrid model\"],\n    \"entities\": [\"Ethan\", \"Maya\"]\n}"
           }
         },
         {
@@ -67,38 +67,38 @@
           "summary": {
             "score": 2.0,
             "passed": false,
-            "output": "Ethan and Maya discuss issues with the customer support assistant, noting mixed feedback, especially around response speed and accuracy. They identify potential issues stemming from the way prompts are engineered and consider alternatives like fine-tuning the model on support transcripts. They also discuss improving UX by handling low-confidence responses with fallback messaging, and agree to implement a hybrid system using GPT-4o and Claude for better response quality. Maya will work on similarity scoring and a two-pass system, while Ethan will coordinate with design for fallback messaging. They plan to meet again next week to review progress."
+            "output": "Ethan and Maya discuss issues with the customer support assistant, noting problems with response speed and accuracy, especially regarding customer frustration with vague or incorrect answers. They consider switching from GPT-4o to Claude for improved response quality, but agree to keep GPT-4o for now due to speed concerns. They explore using embedding similarity to measure response confidence and suggest fine-tuning the prompt for a more human-like tone. They also discuss how to handle cases where the assistant's confidence is low, deciding on a fallback messaging system. Ethan and Maya agree to work on implementing these solutions, with Maya focusing on the similarity metric and hybrid model approach."
           },
           "action_items": {
-            "score": 6.0,
-            "passed": false,
-            "output": "{\n    \"individual_actions\": {\n        \"Maya\": [\n            \"Dig into logs to identify response speed and accuracy issues\",\n            \"Discuss UX feedback with Ethan\",\n            \"Propose fine-tuning prompt for better tone\",\n            \"Propose fallback messaging for low-confidence cases\",\n            \"Propose similarity scoring approach\",\n            \"Set up test run for hybrid model approach\"\n        ]\n    },\n    \"team_actions\": [\"Propose similarity scoring approach\", \"Set up test run for hybrid model approach\"],\n    \"entities\": [\"Maya\"]\n}"
+            "score": 7.0,
+            "passed": true,
+            "output": "{\n    \"individual_actions\": {\n        \"Ethan\": [\n            \"Discuss UX feedback on the assistant's response speed and quality with Maya\",\n            \"Discuss confidence signals with Maya\",\n            \"Discuss fallback messaging with Maya\",\n            \"Sync with design on fallback UX messaging\",\n            \"Prioritize building similarity metric and set up test run for hybrid model approach\"\n        ],\n        \"Maya\": [\n            \"Implement fallback banner or prompt for low-confidence cases\",\n            \"Test run hybrid model approach with GPT-4o and Claude\",\n            \"Create domain-specific prompts for different support categories\"\n        ]\n    },\n    \"team_actions\": [\n        \"Implement fallback banner or prompt for low-confidence cases\",\n        \"Test run hybrid model approach with GPT-4o and Claude\",\n        \"Create domain-specific prompts for different support categories\"\n    ],\n    \"entities\": [\n        \"Ethan\",\n        \"Maya\"\n    ]\n}"
           }
         },
         {
           "run_number": 4,
           "summary": {
-            "score": 2.0,
+            "score": 3.0,
             "passed": false,
-            "output": "Ethan and Maya discuss issues with the customer support assistant, including mixed feedback on response speed and answer quality. They note problems like vague or incorrect answers. Ethan suggests using Claude 3 as a fallback for better quality responses but at the cost of increased latency. Maya suggests measuring response confidence through embedding similarity and proposes a two-pass system. They also discuss improving the assistant's tone and UX, proposing a fallback message for low-confidence responses. Ethan and Maya plan to implement these changes, with Maya focusing on similarity scoring and a hybrid model approach."
+            "output": "Ethan and Maya discuss issues with the customer support assistant, including response speed and accuracy. Maya mentions that the assistant sometimes gives vague or incorrect answers. They consider switching from GPT-4o to Claude 3 for better response quality, but agree to keep GPT-4o for now due to speed concerns. They also discuss improving the assistant's confidence and adding fallback messaging for uncertain responses. Maya proposes using similarity scoring and a two-pass system with Claude 3 as a solution. Ethan and Maya plan to regroup in a week to review progress."
           },
           "action_items": {
-            "score": 10.0,
+            "score": 7.0,
             "passed": true,
-            "output": "{\n\"individual_actions\": {\n    \"Ethan\": [\n        \"Discuss UX feedback with design team\",\n        \"Explore using similarity scoring for quality assessment\",\n        \"Work on two-pass model approach with GPT-4o and Claude\"\n    ],\n    \"Maya\": [\n        \"Propose prompt tuning with anonymized example replies\",\n        \"Implement fallback messaging for low-confidence cases\",\n        \"Prioritize building similarity metric and set up test run\"\n    ]\n},\n\"team_actions\": [\n    \"Discuss UX feedback with design team\",\n    \"Explore using similarity scoring for quality assessment\",\n    \"Work on two-pass model approach with GPT-4o and Claude\",\n    \"Propose prompt tuning with anonymized example replies\",\n    \"Implement fallback messaging for low-confidence cases\",\n    \"Prioritize building similarity metric and set up test run\"\n],\n\"entities\": [\n    \"Ethan\",\n    \"Maya\",\n    \"UX feedback\",\n    \"Similarity scoring\",\n    \"Two-pass model approach\",\n    \"Prompt tuning\",\n    \"Fallback messaging\",\n    \"Similarity metric\"\n]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Maya\": [\n        \"Dig into customer support logs for mixed feedback\",\n        \"Test Claude 3 on the dataset\",\n        \"Propose a two-pass system with GPT-4o and Claude\",\n        \"Propose a hybrid model approach with GPT-4o and Claude\",\n        \"Propose a fallback messaging for low-confidence cases\",\n        \"Implement similarity scoring for detecting low-confidence responses\"\n    ]\n},\n\"team_actions\": [\n    \"Propose a two-pass system with GPT-4o and Claude\",\n    \"Propose a hybrid model approach with GPT-4o and Claude\",\n    \"Propose a fallback messaging for low-confidence cases\"\n],\n\"entities\": [\n    \"Maya\"\n]"
           }
         },
         {
           "run_number": 5,
           "summary": {
-            "score": 3.0,
+            "score": 2.0,
             "passed": false,
-            "output": "Ethan and Maya discuss issues with the customer support assistant, noting mixed feedback on response speed and answer quality. They identify a mix of engineering and model issues, with potential solutions including testing different LLMs, implementing a two-pass system, and using embedding similarity for confidence scoring. They also plan to improve the assistant's tone and add fallback messaging for low-confidence responses. Ethan will coordinate design changes, while Maya will work on similarity scoring and a hybrid model approach. They plan to regroup next week."
+            "output": "Ethan and Maya discuss issues with the customer support assistant, noting problems with response speed and accuracy. They consider switching from GPT-4o to Claude, but agree to keep GPT-4o for now due to speed concerns. Maya suggests using Claude as a fallback for low-confidence responses. They also discuss the need for better confidence signals, such as comparing embeddings between the original ticket and the assistant’s summary. Ethan proposes fine-tuning the model on support transcripts, while Maya recommends prompt tuning instead. They also plan to implement a fallback messaging system in the user interface to inform users when the assistant’s confidence is low. Ethan assigns tasks for Maya to prioritize, including building a similarity scoring system and testing the hybrid model approach."
           },
           "action_items": {
-            "score": 8.0,
-            "passed": true,
-            "output": "{\n    \"individual_actions\": {\n        \"Maya\": [\n            \"Look into the logs of recent customer support assistant feedback\",\n            \"Continue using GPT-4o as the main model for customer support\",\n            \"Implement Claude as a fallback option for answers\",\n            \"Explore using embedding similarity to measure response quality and confidence\",\n            \"Focus on prompt tuning to improve the assistant's tone and empathy\",\n            \"Set up a test run for the hybrid model approach with GPT-4o and Claude\",\n            \"Work on a fallback UX messaging for cases when the assistant's confidence is low\"\n        ]\n    },\n    \"team_actions\": [\n        \"Explore using embedding similarity to measure response quality and confidence\",\n        \"Focus on prompt tuning to improve the assistant's tone and empathy\",\n        \"Set up a test run for the hybrid model approach with GPT-4o and Claude\",\n        \"Work on a fallback UX messaging for cases when the assistant's confidence is low\"\n    ],\n    \"entities\": [\n        \"Maya\",\n        \"Claude\",\n        \"GPT-4o\",\n        \"embedding similarity\",\n        \"prompt tuning\"\n    ]\n}"
+            "score": 6.0,
+            "passed": false,
+            "output": "{\n    \"individual_actions\": {\n        \"Ethan\": [\n            \"Explore using embeddings for measuring model confidence\",\n            \"Sync with design on fallback UX messaging\",\n            \"Prioritize building similarity metric and set up test run for hybrid model approach\"\n        ],\n        \"Maya\": [\n            \"Implement two-pass system with GPT-4o and Claude\",\n            \"Create domain-specific prompts for different support areas\",\n            \"Admit low-confidence cases with fallback messaging\"\n        ]\n    },\n    \"team_actions\": [\n        \"Investigate and decide on whether to stick with GPT-4o or switch to Claude\",\n        \"Implement fallback messaging for low-confidence cases\",\n        \"Work on fine-tuning the model on actual support transcripts\",\n        \"Explore using embeddings for measuring model confidence\"\n    ],\n    \"entities\": [\n        \"Ethan\",\n        \"Maya\",\n        \"GPT-4o\",\n        \"Claude\"\n    ]\n}"
           }
         }
       ]
@@ -107,34 +107,34 @@
       "case_id": "team_call_transcript",
       "summary_statistics": {
         "count": 5,
-        "mean": 2.8,
-        "median": 2.0,
+        "mean": 4.0,
+        "median": 4.0,
         "min": 2.0,
-        "max": 6.0,
-        "std_dev": 1.79,
-        "pass_rate": 0.0
+        "max": 7.0,
+        "std_dev": 2.12,
+        "pass_rate": 0.2
       },
       "action_item_statistics": {
         "count": 5,
-        "mean": 3.2,
+        "mean": 2.6,
         "median": 2.0,
         "min": 2.0,
         "max": 5.0,
-        "std_dev": 1.64,
+        "std_dev": 1.34,
         "pass_rate": 0.0
       },
       "runs": [
         {
           "run_number": 1,
           "summary": {
-            "score": 6.0,
+            "score": 5.0,
             "passed": false,
-            "output": "James and Adam discuss issues with pipeline monitoring, specifically timeout failures on data ingestion pipelines over the weekend. They identify a conflict between a batch job and scheduled database backups, which has worsened due to increased data volume. Options include moving the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of these approaches, including optimizing the batch job and switching to incremental backups. James agrees and plans to shift the backup window temporarily. Adam will start work on batch job optimization and will send a write-up of planned changes. James will involve Sarah for incremental backups and plans to introduce Lena and Marcus to the on-call rotation, with a shadowed on-call week initially."
+            "output": "James and Adam discuss issues with a data ingestion pipeline, specifically timeout failures over the weekend. They identify backup window conflicts as the root cause. Adam suggests three options: moving the backup window, optimising the batch job, or switching to incremental backups. They decide on a combination approach, with a temporary backup window shift and starting batch job optimisation. Adam will also propose incremental backups to Sarah's team. James will coordinate with Sarah for the backup window change and plans to include Lena and Marcus in the on-call rotation starting next month."
           },
           "action_items": {
             "score": 5.0,
             "passed": false,
-            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Batch job optimisation\", \"Send write-up of query changes to James\"],\n    \"Bob\": [\"Temporary backup window shift\"]\n},\n\"team_actions\": [\"Batch job optimisation\", \"Incremental backups\", \"Temporary backup window shift\"],\n\"entities\": [\"Alice\", \"Bob\", \"James\", \"Adam\"]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"James\": [\n        \"Reach out to Sarah for incremental backup configuration changes\",\n        \"Reach out to ops for temporary backup window shift\",\n        \"Bring Lena and Marcus into the on-call rotation\"\n    ],\n    \"Adam\": [\n        \"Optimise the batch job\",\n        \"Write up the requirements doc for incremental backups\",\n        \"Shadow on-call for Lena and Marcus for one week\"\n    ]\n},\n\"team_actions\": [\n    \"Start batch job optimisation sprint\",\n    \"Implement incremental backup configuration changes\",\n    \"Shift temporary backup window\"\n],\n\"entities\": [\n    \"James\",\n    \"Adam\",\n    \"Lena\",\n    \"Marcus\",\n    \"Sarah\",\n    \"ops\"\n]"
           }
         },
         {
@@ -142,25 +142,25 @@
           "summary": {
             "score": 2.0,
             "passed": false,
-            "output": "James and Adam discuss issues with a data ingestion pipeline, specifically timeout failures over the weekend. They identify the backup window and batch job as the root cause, with the batch job taking longer due to increased data volume. Options include shifting the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of these approaches. James and Adam agree to shift the backup window temporarily and start batch job optimization in the current sprint. They also plan to involve Sarah for incremental backup changes and consider rotating on-call duties, including shadowing for new team members."
+            "output": "James and Adam discuss issues with a data ingestion pipeline, specifically timeouts occurring during backups. They identify three options: shifting the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of both as the best approach. James agrees and assigns Adam to optimize the batch job, while also coordinating with DevOps for the incremental backup change. They decide to temporarily shift the backup window and bring Lena and Marcus into the on-call rotation. Adam will start the batch job optimization sprint."
           },
           "action_items": {
             "score": 2.0,
             "passed": false,
-            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Send write-up of query changes to James\"],\n    \"Bob\": [\"Reach out to Sarah about incremental backups\"]\n},\n\"team_actions\": [\"Start batch job optimisation\", \"Shift backup window temporarily\", \"Rebalance on-call rotation\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Sarah\", \"Lena\", \"Marcus\"]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Send write-up of query changes to James\"],\n    \"Bob\": [\"Reach out to Sarah about incremental backups\"]\n},\n\"team_actions\": [\"Batch job optimisation\", \"Temporary window shift\", \"On-call rotation rebalance\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Sarah\", \"Lena\", \"Marcus\"]\n}"
           }
         },
         {
           "run_number": 3,
           "summary": {
-            "score": 2.0,
+            "score": 4.0,
             "passed": false,
-            "output": "James and Adam discuss issues with pipeline monitoring, specifically timeout failures on data ingestion pipelines. Adam identifies a conflict between a batch job and scheduled database backups. They explore options: shifting the backup window, optimizing the batch job, or using incremental backups. Adam suggests a combination of these approaches. James plans to shift the backup window temporarily and optimize the batch job. Adam will also start work on query optimizations. James and Adam also discuss on-call rotation, with Adam recommending bringing Lena and Marcus into the rotation starting next month."
+            "output": "James and Adam discuss issues with the pipeline monitoring, specifically timeouts on data ingestion due to batch job conflicts with scheduled backups. They agree to shift the backup window temporarily, optimize the batch job, and switch to incremental backups. Adam will focus on batch job optimization, while James will coordinate with DevOps for the incremental backup switch. James also mentions rebalancing the on-call schedule, proposing to bring Lena and Marcus into the rotation starting next month. Adam suggests a shadowed on-call week for them initially. James will join Adam for pipeline monitoring sprint planning."
           },
           "action_items": {
             "score": 2.0,
             "passed": false,
-            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Send write-up of query changes to James\"],\n    \"Bob\": [\"Reach out to Sarah about incremental backups\"]\n},\n\"team_actions\": [\"Start batch job optimisation\", \"Temporarily shift backup window\", \"Rebalance on-call rotation\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Sarah\", \"Lena\", \"Marcus\"]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Batch job optimisation\", \"Send write-up of query changes\"],\n    \"Bob\": [\"Temporary window shift\"]\n},\n\"team_actions\": [\"Batch job optimisation\", \"Incremental backup switch\", \"On-call rotation adjustment\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Lena\", \"Marcus\"]\n}"
           }
         },
         {
@@ -168,25 +168,25 @@
           "summary": {
             "score": 2.0,
             "passed": false,
-            "output": "James and Adam discuss issues with a data ingestion pipeline, specifically timeout failures over the weekend. They identify a backup window conflict as the root cause and consider options: moving the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of these approaches. They agree to move the backup window temporarily to prevent weekend alerts. Adam will start optimizing the batch job, and James will coordinate with Sarah for the incremental backup switch. Adam will also begin the batch job optimization and send a write-up to James. James and Adam plan to rebalance the on-call rotation, with Lena and Marcus joining the rotation starting next month."
+            "output": "James and Adam discuss issues with pipeline monitoring, specifically timeouts from data ingestion pipeline failures over the weekend. They identify a backup window conflict as the root cause and consider three options: shifting the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of both. They agree to shift the backup window temporarily and start batch job optimization. Adam will also initiate the incremental backup switch with DevOps. James will coordinate with Sarah for the infrastructure changes. Adam will also shadow on-call for a week before taking full responsibility. James will bring Lena and Marcus into the rotation starting next month."
           },
           "action_items": {
-            "score": 5.0,
+            "score": 2.0,
             "passed": false,
-            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Batch job optimisation\", \"Send write-up of query changes to James\"],\n    \"Bob\": [\"Temporary window shift\"]\n},\n\"team_actions\": [\"Batch job optimisation\", \"Incremental backup switch\", \"Rebalance on-call rotation\"],\n\"entities\": [\"Alice\", \"Bob\", \"James\", \"Adam\", \"Lena\", \"Marcus\"]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Send write-up of query changes before batch job optimisation\"],\n    \"Bob\": [\"Reach out to Sarah about incremental backups\", \"Reach out to ops about window shift\"]\n},\n\"team_actions\": [\"Start batch job optimisation\", \"Loop in Sarah about incremental backups\", \"Do temporary window shift\"],\n\"entities\": [\"Alice\", \"Bob\", \"Sarah\", \"James\"]\n}"
           }
         },
         {
           "run_number": 5,
           "summary": {
-            "score": 2.0,
-            "passed": false,
-            "output": "James and Adam discuss issues with the pipeline monitoring, specifically timeout failures on the data ingestion pipeline over the weekend. They identify the backup window and batch job as the root cause, with the batch job now taking longer due to increased data volume. Options include shifting the backup window, optimizing the batch job, or switching to incremental backups. Adam suggests a combination of these approaches. James agrees to prioritizing the batch job optimization and the incremental backup switch. Adam also mentions that the on-call rotation needs balancing, with James proposing to bring Lena and Marcus into the rotation starting next month. Adam will provide a write-up of the query changes for the batch job optimization."
+            "score": 7.0,
+            "passed": true,
+            "output": "James and Adam discuss issues with a data ingestion pipeline, specifically timeout failures over the weekend. Adam identifies the root cause as a conflict between a batch job and scheduled database backups. They consider three options: shifting the backup window, optimizing the batch job, and switching to incremental backups. Adam suggests a combination of these, prioritizing job optimization. James agrees to shift the backup window temporarily. Adam mentions that switching to incremental backups requires DevOps involvement. They also discuss the on-call rotation, with James proposing to include Lena and Marcus in the rotation starting next month. Adam suggests a shadowed on-call week for them first. James agrees to these suggestions."
           },
           "action_items": {
             "score": 2.0,
             "passed": false,
-            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Optimise batch job\", \"Write up incremental backup requirements doc\", \"Shadow on-call for Lena and Marcus\"],\n    \"Bob\": [\"Shift backup window temporarily\"]\n},\n\"team_actions\": [\"Batch job optimisation\", \"Incremental backup switch\", \"Temporary window shift\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Lena\", \"Marcus\", \"Sarah\"]\n}"
+            "output": "{\n\"individual_actions\": {\n    \"Alice\": [\"Optimize batch job\", \"Review and approve incremental backup switch requirements\"],\n    \"Bob\": [\"Reach out to Sarah for incremental backup switch\"]\n},\n\"team_actions\": [\"Shift backup window temporarily\", \"Rebalance on-call rotation\"],\n\"entities\": [\"Alice\", \"Bob\", \"Adam\", \"Sarah\", \"Lena\", \"Marcus\"]\n}"
           }
         }
       ]
