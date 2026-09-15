@@ -1,0 +1,661 @@
+{
+  "chapter": "Jason Arbon - Testing AI - Chapter 3",
+  "generated_at": "2026-09-15T22:15:48.273701+00:00",
+  "configuration": {
+    "confidence_level": 0.95,
+    "minimum_acceptable_score": 7.0,
+    "minimum_acceptable_pass_rate": 0.8,
+    "target_score_margin": 0.5,
+    "proportion_method": "wilson",
+    "mean_method": "t",
+    "difference_method": "paired_t"
+  },
+  "method_notes": [
+    "Intervals follow the pattern estimate +/- multiplier * standard error.",
+    "Score intervals use the t multiplier because the samples are small; 1.96 would be too narrow.",
+    "Pass rate intervals use the Wilson method, which behaves correctly near 0% and 100% where the simple Wald formula collapses to zero width.",
+    "Base and metamorphic results are compared as paired differences per case, not as two marginal intervals.",
+    "No claim is made that these intervals are wide enough samples for a high-risk release. Where they are not, the verdict is INCONCLUSIVE rather than PASS."
+  ],
+  "git": {
+    "commit": null,
+    "ref": null
+  },
+  "repeated_run_analysis": {
+    "source": "evidence\\chapter1\\chapter1-evidence.json",
+    "runs_per_case": 5,
+    "cases": [
+      {
+        "case_id": "meeting_transcript",
+        "risk_level": "high",
+        "metrics": {
+          "summary": {
+            "scores": [
+              9.0,
+              9.01,
+              9.0,
+              8.56,
+              9.0
+            ],
+            "score_interval": {
+              "kind": "mean",
+              "method": "t",
+              "confidence": 0.95,
+              "n": 5,
+              "estimate": 8.91,
+              "sample_standard_deviation": 0.2,
+              "standard_error": 0.0885,
+              "multiplier": 2.776,
+              "margin_of_error": 0.25,
+              "lower": 8.67,
+              "upper": 9.16,
+              "degenerate": false,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "score_verdict": {
+              "verdict": "MEETS_THRESHOLD",
+              "threshold": 7.0,
+              "reason": "The entire interval (8.67 to 9.16) is at or above the threshold of 7.0."
+            },
+            "score_statement": "The average summary quality score was 8.91. The approximate 95% confidence interval is about 8.67 to 9.16 (n=5).",
+            "pass_rate_interval": {
+              "kind": "proportion",
+              "method": "wilson",
+              "confidence": 0.95,
+              "passes": 5,
+              "total": 5,
+              "estimate": 1.0,
+              "standard_error": 0.196,
+              "multiplier": 1.96,
+              "margin_of_error": 0.2172,
+              "lower": 0.5655,
+              "upper": 1.0,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_interval_wald": {
+              "kind": "proportion",
+              "method": "wald",
+              "confidence": 0.95,
+              "passes": 5,
+              "total": 5,
+              "estimate": 1.0,
+              "standard_error": 0.0,
+              "multiplier": 1.96,
+              "margin_of_error": 0.0,
+              "lower": 1.0,
+              "upper": 1.0,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_verdict": {
+              "verdict": "INCONCLUSIVE",
+              "threshold": 0.8,
+              "reason": "The interval (0.5655 to 1.0) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+            },
+            "pass_rate_statement": "In this sample, 100% of summary quality score runs passed (5/5). The approximate 95% confidence interval is about 57% to 100% (wilson method)."
+          },
+          "action_items": {
+            "scores": [
+              8.32,
+              9.0,
+              5.23,
+              8.27,
+              7.88
+            ],
+            "score_interval": {
+              "kind": "mean",
+              "method": "t",
+              "confidence": 0.95,
+              "n": 5,
+              "estimate": 7.74,
+              "sample_standard_deviation": 1.46,
+              "standard_error": 0.6529,
+              "multiplier": 2.776,
+              "margin_of_error": 1.81,
+              "lower": 5.93,
+              "upper": 9.55,
+              "degenerate": false,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "score_verdict": {
+              "verdict": "INCONCLUSIVE",
+              "threshold": 7.0,
+              "reason": "The interval (5.93 to 9.55) straddles the threshold of 7.0. This sample cannot separate passing from failing."
+            },
+            "score_statement": "The average action item quality score was 7.74. The approximate 95% confidence interval is about 5.93 to 9.55 (n=5).",
+            "pass_rate_interval": {
+              "kind": "proportion",
+              "method": "wilson",
+              "confidence": 0.95,
+              "passes": 4,
+              "total": 5,
+              "estimate": 0.8,
+              "standard_error": 0.2654,
+              "multiplier": 1.96,
+              "margin_of_error": 0.2941,
+              "lower": 0.3755,
+              "upper": 0.9638,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_interval_wald": {
+              "kind": "proportion",
+              "method": "wald",
+              "confidence": 0.95,
+              "passes": 4,
+              "total": 5,
+              "estimate": 0.8,
+              "standard_error": 0.1789,
+              "multiplier": 1.96,
+              "margin_of_error": 0.3506,
+              "lower": 0.4494,
+              "upper": 1.0,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_verdict": {
+              "verdict": "INCONCLUSIVE",
+              "threshold": 0.8,
+              "reason": "The interval (0.3755 to 0.9638) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+            },
+            "pass_rate_statement": "In this sample, 80% of action item quality score runs passed (4/5). The approximate 95% confidence interval is about 38% to 96% (wilson method).",
+            "runs_needed_for_target_margin": {
+              "target_margin": 0.5,
+              "estimated_runs": 33
+            }
+          }
+        }
+      },
+      {
+        "case_id": "team_call_transcript",
+        "risk_level": "medium",
+        "metrics": {
+          "summary": {
+            "scores": [
+              9.0,
+              9.0,
+              9.01,
+              9.0,
+              9.0
+            ],
+            "score_interval": {
+              "kind": "mean",
+              "method": "t",
+              "confidence": 0.95,
+              "n": 5,
+              "estimate": 9.0,
+              "sample_standard_deviation": 0.0,
+              "standard_error": 0.002,
+              "multiplier": 2.776,
+              "margin_of_error": 0.01,
+              "lower": 9.0,
+              "upper": 9.01,
+              "degenerate": false,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "score_verdict": {
+              "verdict": "MEETS_THRESHOLD",
+              "threshold": 7.0,
+              "reason": "The entire interval (9.0 to 9.01) is at or above the threshold of 7.0."
+            },
+            "score_statement": "The average summary quality score was 9.0. The approximate 95% confidence interval is about 9.0 to 9.01 (n=5).",
+            "pass_rate_interval": {
+              "kind": "proportion",
+              "method": "wilson",
+              "confidence": 0.95,
+              "passes": 5,
+              "total": 5,
+              "estimate": 1.0,
+              "standard_error": 0.196,
+              "multiplier": 1.96,
+              "margin_of_error": 0.2172,
+              "lower": 0.5655,
+              "upper": 1.0,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_interval_wald": {
+              "kind": "proportion",
+              "method": "wald",
+              "confidence": 0.95,
+              "passes": 5,
+              "total": 5,
+              "estimate": 1.0,
+              "standard_error": 0.0,
+              "multiplier": 1.96,
+              "margin_of_error": 0.0,
+              "lower": 1.0,
+              "upper": 1.0,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_verdict": {
+              "verdict": "INCONCLUSIVE",
+              "threshold": 0.8,
+              "reason": "The interval (0.5655 to 1.0) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+            },
+            "pass_rate_statement": "In this sample, 100% of summary quality score runs passed (5/5). The approximate 95% confidence interval is about 57% to 100% (wilson method)."
+          },
+          "action_items": {
+            "scores": [
+              2.68,
+              1.99,
+              7.95,
+              3.68,
+              3.02
+            ],
+            "score_interval": {
+              "kind": "mean",
+              "method": "t",
+              "confidence": 0.95,
+              "n": 5,
+              "estimate": 3.86,
+              "sample_standard_deviation": 2.36,
+              "standard_error": 1.0572,
+              "multiplier": 2.776,
+              "margin_of_error": 2.93,
+              "lower": 0.93,
+              "upper": 6.8,
+              "degenerate": false,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "score_verdict": {
+              "verdict": "BELOW_THRESHOLD",
+              "threshold": 7.0,
+              "reason": "The entire interval (0.93 to 6.8) is below the threshold of 7.0."
+            },
+            "score_statement": "The average action item quality score was 3.86. The approximate 95% confidence interval is about 0.93 to 6.8 (n=5).",
+            "pass_rate_interval": {
+              "kind": "proportion",
+              "method": "wilson",
+              "confidence": 0.95,
+              "passes": 1,
+              "total": 5,
+              "estimate": 0.2,
+              "standard_error": 0.2654,
+              "multiplier": 1.96,
+              "margin_of_error": 0.2941,
+              "lower": 0.0362,
+              "upper": 0.6245,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_interval_wald": {
+              "kind": "proportion",
+              "method": "wald",
+              "confidence": 0.95,
+              "passes": 1,
+              "total": 5,
+              "estimate": 0.2,
+              "standard_error": 0.1789,
+              "multiplier": 1.96,
+              "margin_of_error": 0.3506,
+              "lower": 0.0,
+              "upper": 0.5506,
+              "sample_size_warning": "Sample size is 5. The interval is wide. Increasing the number of runs will narrow it."
+            },
+            "pass_rate_verdict": {
+              "verdict": "BELOW_THRESHOLD",
+              "threshold": 0.8,
+              "reason": "The entire interval (0.0362 to 0.6245) is below the threshold of 0.8."
+            },
+            "pass_rate_statement": "In this sample, 20% of action item quality score runs passed (1/5). The approximate 95% confidence interval is about 4% to 62% (wilson method)."
+          }
+        }
+      }
+    ],
+    "pooled": {
+      "summary": {
+        "scores": [
+          9.0,
+          9.01,
+          9.0,
+          8.56,
+          9.0,
+          9.0,
+          9.0,
+          9.01,
+          9.0,
+          9.0
+        ],
+        "score_interval": {
+          "kind": "mean",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 10,
+          "estimate": 8.96,
+          "sample_standard_deviation": 0.14,
+          "standard_error": 0.0442,
+          "multiplier": 2.262,
+          "margin_of_error": 0.1,
+          "lower": 8.86,
+          "upper": 9.06,
+          "degenerate": false,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "score_verdict": {
+          "verdict": "MEETS_THRESHOLD",
+          "threshold": 7.0,
+          "reason": "The entire interval (8.86 to 9.06) is at or above the threshold of 7.0."
+        },
+        "score_statement": "The average summary quality score was 8.96. The approximate 95% confidence interval is about 8.86 to 9.06 (n=10).",
+        "pass_rate_interval": {
+          "kind": "proportion",
+          "method": "wilson",
+          "confidence": 0.95,
+          "passes": 10,
+          "total": 10,
+          "estimate": 1.0,
+          "standard_error": 0.098,
+          "multiplier": 1.96,
+          "margin_of_error": 0.1388,
+          "lower": 0.7225,
+          "upper": 1.0,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "pass_rate_interval_wald": {
+          "kind": "proportion",
+          "method": "wald",
+          "confidence": 0.95,
+          "passes": 10,
+          "total": 10,
+          "estimate": 1.0,
+          "standard_error": 0.0,
+          "multiplier": 1.96,
+          "margin_of_error": 0.0,
+          "lower": 1.0,
+          "upper": 1.0,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "pass_rate_verdict": {
+          "verdict": "INCONCLUSIVE",
+          "threshold": 0.8,
+          "reason": "The interval (0.7225 to 1.0) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+        },
+        "pass_rate_statement": "In this sample, 100% of summary quality score runs passed (10/10). The approximate 95% confidence interval is about 72% to 100% (wilson method)."
+      },
+      "action_items": {
+        "scores": [
+          8.32,
+          9.0,
+          5.23,
+          8.27,
+          7.88,
+          2.68,
+          1.99,
+          7.95,
+          3.68,
+          3.02
+        ],
+        "score_interval": {
+          "kind": "mean",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 10,
+          "estimate": 5.8,
+          "sample_standard_deviation": 2.76,
+          "standard_error": 0.872,
+          "multiplier": 2.262,
+          "margin_of_error": 1.97,
+          "lower": 3.83,
+          "upper": 7.77,
+          "degenerate": false,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "score_verdict": {
+          "verdict": "INCONCLUSIVE",
+          "threshold": 7.0,
+          "reason": "The interval (3.83 to 7.77) straddles the threshold of 7.0. This sample cannot separate passing from failing."
+        },
+        "score_statement": "The average action item quality score was 5.8. The approximate 95% confidence interval is about 3.83 to 7.77 (n=10).",
+        "pass_rate_interval": {
+          "kind": "proportion",
+          "method": "wilson",
+          "confidence": 0.95,
+          "passes": 5,
+          "total": 10,
+          "estimate": 0.5,
+          "standard_error": 0.186,
+          "multiplier": 1.96,
+          "margin_of_error": 0.2634,
+          "lower": 0.2366,
+          "upper": 0.7634,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "pass_rate_interval_wald": {
+          "kind": "proportion",
+          "method": "wald",
+          "confidence": 0.95,
+          "passes": 5,
+          "total": 10,
+          "estimate": 0.5,
+          "standard_error": 0.1581,
+          "multiplier": 1.96,
+          "margin_of_error": 0.3099,
+          "lower": 0.1901,
+          "upper": 0.8099,
+          "sample_size_warning": "Sample size is 10. The interval is wide. Increasing the number of runs will narrow it."
+        },
+        "pass_rate_verdict": {
+          "verdict": "BELOW_THRESHOLD",
+          "threshold": 0.8,
+          "reason": "The entire interval (0.2366 to 0.7634) is below the threshold of 0.8."
+        },
+        "pass_rate_statement": "In this sample, 50% of action item quality score runs passed (5/10). The approximate 95% confidence interval is about 24% to 76% (wilson method).",
+        "runs_needed_for_target_margin": {
+          "target_margin": 0.5,
+          "estimated_runs": 118
+        }
+      }
+    }
+  },
+  "release_sample_analysis": {
+    "source": "evidence\\chapter2\\release-evidence.json",
+    "sampled_cases": 2,
+    "across_cases": {
+      "summary": {
+        "scores": [
+          9.0,
+          9.0
+        ],
+        "score_interval": {
+          "kind": "mean",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 2,
+          "estimate": 9.0,
+          "sample_standard_deviation": 0.0,
+          "standard_error": 0.0,
+          "multiplier": 12.706,
+          "margin_of_error": 0.0,
+          "lower": 9.0,
+          "upper": 9.0,
+          "degenerate": true,
+          "sample_size_warning": "All 2 observations were identical, so the interval has zero width. This is not evidence of certainty. Sample size is 2. The interval is very wide and should not be treated as evidence for a high-risk release."
+        },
+        "score_verdict": {
+          "verdict": "MEETS_THRESHOLD",
+          "threshold": 7.0,
+          "reason": "The entire interval (9.0 to 9.0) is at or above the threshold of 7.0."
+        },
+        "score_statement": "The average summary quality score was 9.0. The approximate 95% confidence interval is about 9.0 to 9.0 (n=2)."
+      },
+      "action_items": {
+        "scores": [
+          5.06,
+          0.94
+        ],
+        "score_interval": {
+          "kind": "mean",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 2,
+          "estimate": 3.0,
+          "sample_standard_deviation": 2.91,
+          "standard_error": 2.06,
+          "multiplier": 12.706,
+          "margin_of_error": 26.17,
+          "lower": -23.17,
+          "upper": 29.17,
+          "degenerate": false,
+          "sample_size_warning": "Sample size is 2. The interval is very wide and should not be treated as evidence for a high-risk release."
+        },
+        "score_verdict": {
+          "verdict": "INCONCLUSIVE",
+          "threshold": 7.0,
+          "reason": "The interval (-23.17 to 29.17) straddles the threshold of 7.0. This sample cannot separate passing from failing."
+        },
+        "score_statement": "The average action item quality score was 3.0. The approximate 95% confidence interval is about -23.17 to 29.17 (n=2)."
+      }
+    },
+    "paired_metamorphic": {
+      "summary": {
+        "case_ids": [
+          "meeting_transcript",
+          "team_call_transcript"
+        ],
+        "base_scores": [
+          9.0,
+          9.0
+        ],
+        "metamorphic_scores": [
+          8.92,
+          8.0
+        ],
+        "difference_interval": {
+          "kind": "difference_paired",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 2,
+          "estimate": -0.54,
+          "sample_standard_deviation": 0.65,
+          "standard_error": 0.46,
+          "multiplier": 12.706,
+          "margin_of_error": 5.84,
+          "lower": -6.38,
+          "upper": 5.3,
+          "degenerate": false,
+          "sample_size_warning": "Sample size is 2. The interval is very wide and should not be treated as evidence for a high-risk release.",
+          "pairs": 2,
+          "mean_before": 9.0,
+          "mean_after": 8.46,
+          "differences": [
+            -0.08,
+            -1.0
+          ],
+          "crosses_zero": true
+        },
+        "statement": "The observed change in summary quality score was -0.54. The approximate 95% confidence interval is about -6.38 to 5.3. The interval crosses zero, so these data do not clearly separate the two versions under this method."
+      },
+      "action_items": {
+        "case_ids": [
+          "meeting_transcript",
+          "team_call_transcript"
+        ],
+        "base_scores": [
+          5.06,
+          0.94
+        ],
+        "metamorphic_scores": [
+          4.05,
+          2.67
+        ],
+        "difference_interval": {
+          "kind": "difference_paired",
+          "method": "t",
+          "confidence": 0.95,
+          "n": 2,
+          "estimate": 0.36,
+          "sample_standard_deviation": 1.94,
+          "standard_error": 1.37,
+          "multiplier": 12.706,
+          "margin_of_error": 17.41,
+          "lower": -17.05,
+          "upper": 17.77,
+          "degenerate": false,
+          "sample_size_warning": "Sample size is 2. The interval is very wide and should not be treated as evidence for a high-risk release.",
+          "pairs": 2,
+          "mean_before": 3.0,
+          "mean_after": 3.36,
+          "differences": [
+            -1.01,
+            1.73
+          ],
+          "crosses_zero": true
+        },
+        "statement": "The observed change in action item quality score was 0.36. The approximate 95% confidence interval is about -17.05 to 17.77. The interval crosses zero, so these data do not clearly separate the two versions under this method."
+      }
+    },
+    "note": "Chapter 2 scores each sampled case once. These intervals describe variation across cases, not run-to-run stability."
+  },
+  "confidence_gate": {
+    "confidence_level": 0.95,
+    "minimum_acceptable_score": 7.0,
+    "minimum_acceptable_pass_rate": 0.8,
+    "blocking_findings": [
+      {
+        "case_id": "meeting_transcript",
+        "risk_level": "high",
+        "metric": "summary",
+        "measure": "pass_rate",
+        "verdict": "INCONCLUSIVE",
+        "reason": "The interval (0.5655 to 1.0) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+      },
+      {
+        "case_id": "meeting_transcript",
+        "risk_level": "high",
+        "metric": "action_items",
+        "measure": "score",
+        "verdict": "INCONCLUSIVE",
+        "reason": "The interval (5.93 to 9.55) straddles the threshold of 7.0. This sample cannot separate passing from failing."
+      },
+      {
+        "case_id": "meeting_transcript",
+        "risk_level": "high",
+        "metric": "action_items",
+        "measure": "pass_rate",
+        "verdict": "INCONCLUSIVE",
+        "reason": "The interval (0.3755 to 0.9638) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+      }
+    ],
+    "review_findings": [
+      {
+        "case_id": "team_call_transcript",
+        "risk_level": "medium",
+        "metric": "summary",
+        "measure": "pass_rate",
+        "verdict": "INCONCLUSIVE",
+        "reason": "The interval (0.5655 to 1.0) straddles the threshold of 0.8. This sample cannot separate passing from failing."
+      },
+      {
+        "case_id": "team_call_transcript",
+        "risk_level": "medium",
+        "metric": "action_items",
+        "measure": "score",
+        "verdict": "BELOW_THRESHOLD",
+        "reason": "The entire interval (0.93 to 6.8) is below the threshold of 7.0."
+      },
+      {
+        "case_id": "team_call_transcript",
+        "risk_level": "medium",
+        "metric": "action_items",
+        "measure": "pass_rate",
+        "verdict": "BELOW_THRESHOLD",
+        "reason": "The entire interval (0.0362 to 0.6245) is below the threshold of 0.8."
+      }
+    ],
+    "metamorphic_regressions": [],
+    "metamorphic_inconclusive": [
+      {
+        "metric": "summary",
+        "difference": -0.54,
+        "lower": -6.38,
+        "upper": 5.3,
+        "reason": "The difference interval crosses zero. This sample cannot show whether the transformation changed behaviour."
+      },
+      {
+        "metric": "action_items",
+        "difference": 0.36,
+        "lower": -17.05,
+        "upper": 17.77,
+        "reason": "The difference interval crosses zero. This sample cannot show whether the transformation changed behaviour."
+      }
+    ],
+    "decision": "BLOCK",
+    "reason": "A high-risk case did not demonstrate, at the 95% confidence level, that it meets the release threshold."
+  }
+}

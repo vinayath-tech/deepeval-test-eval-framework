@@ -1144,9 +1144,11 @@ def main() -> None:
         "release_gate": release_decision,
 
         "chapter3_status": (
-            "Not implemented in Commit 3. "
             "No confidence intervals or statistical significance "
-            "claims are made by this evidence packet."
+            "claims are made by this evidence packet. Chapter 3 "
+            "calculates intervals over this packet and over the "
+            "Chapter 1 repeated runs; see "
+            "evidence/chapter3/confidence-evidence.json."
         ),
     }
 
