@@ -1,0 +1,16 @@
+{
+  "meeting_transcript": {
+    "risk_level": "high",
+    "business_impact": "high",
+    "failure_cost": "high",
+    "sampling_weight": 1.0,
+    "rationale": "Incorrect summaries or action items could cause business commitments, ownership, or decisions to be missed."
+  },
+  "team_call_transcript": {
+    "risk_level": "medium",
+    "business_impact": "medium",
+    "failure_cost": "medium",
+    "sampling_weight": 0.75,
+    "rationale": "Incorrect action extraction could cause delivery or ownership confusion within the team."
+  }
+}

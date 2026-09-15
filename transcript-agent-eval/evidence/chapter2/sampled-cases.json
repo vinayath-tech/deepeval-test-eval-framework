@@ -1,0 +1,26 @@
+{
+  "population_size": 2,
+  "sampled_size": 2,
+  "strata": {
+    "high": {
+      "population": 1,
+      "sampled": 1,
+      "sampling_rate": 1.0,
+      "case_ids": [
+        "meeting_transcript"
+      ]
+    },
+    "medium": {
+      "population": 1,
+      "sampled": 1,
+      "sampling_rate": 1.0,
+      "case_ids": [
+        "team_call_transcript"
+      ]
+    }
+  },
+  "sampled_case_ids": [
+    "meeting_transcript",
+    "team_call_transcript"
+  ]
+}
