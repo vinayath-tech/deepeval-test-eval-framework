@@ -1,6 +1,6 @@
 # Chapter 3 Confidence Evidence
 
-Generated at: `2026-09-15T22:15:48.273701+00:00`
+Generated at: `2026-09-15T22:43:24.450901+00:00`
 
 ---
 
@@ -131,8 +131,9 @@ An interval that crosses zero means these data do not clearly separate the two v
 ## Method Notes
 
 - Intervals follow the pattern estimate +/- multiplier * standard error.
+- The t/normal multipliers and the interval calculations themselves are computed by scipy.stats (ttest_1samp, ttest_ind, binomtest), not by a hand-rolled formula or a lookup table.
 - Score intervals use the t multiplier because the samples are small; 1.96 would be too narrow.
-- Pass rate intervals use the Wilson method, which behaves correctly near 0% and 100% where the simple Wald formula collapses to zero width.
+- Pass rate intervals use the Wilson method (scipy.stats.binomtest), which behaves correctly near 0% and 100% where the simple Wald formula collapses to zero width.
 - Base and metamorphic results are compared as paired differences per case, not as two marginal intervals.
 - No claim is made that these intervals are wide enough samples for a high-risk release. Where they are not, the verdict is INCONCLUSIVE rather than PASS.
 

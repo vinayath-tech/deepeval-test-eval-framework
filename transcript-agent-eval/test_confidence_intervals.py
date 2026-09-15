@@ -86,9 +86,10 @@ class TestChapterWorkedExamples:
         )
         assert round(interval["standard_error"], 2) == 0.14
 
-        # The chapter uses 1.96 for n=100. This module uses the nearest
-        # tabulated t multiplier below df=99, which is slightly larger
-        # and therefore slightly more conservative.
+        # The chapter uses 1.96 for n=100 as a large-sample approximation.
+        # This module uses the exact t multiplier for df=99 (about
+        # 1.984), which is slightly larger and therefore slightly more
+        # conservative than the book's rounded example.
         assert interval["lower"] == pytest.approx(7.83, abs=0.02)
         assert interval["upper"] == pytest.approx(8.37, abs=0.02)
 
@@ -100,15 +101,20 @@ class TestMultipliers:
 
     def test_small_samples_get_a_larger_multiplier(self):
         # The chapter's point: with few samples the multiplier grows.
-        assert t_multiplier(4, 0.95) == 2.776
+        # scipy.stats.t.ppf is exact, so this is the published t-table
+        # value for df=4, not a rounded lookup.
+        assert t_multiplier(4, 0.95) == pytest.approx(2.776, abs=0.001)
         assert t_multiplier(4, 0.95) > z_multiplier(0.95)
 
     def test_multiplier_converges_on_z_for_large_samples(self):
         assert t_multiplier(5000, 0.95) == pytest.approx(1.96, abs=0.01)
 
-    def test_untabulated_df_stays_conservative(self):
-        # df=35 is not tabulated; it must not be narrower than df=40.
-        assert t_multiplier(35, 0.95) >= t_multiplier(40, 0.95)
+    def test_multiplier_shrinks_monotonically_with_more_degrees_of_freedom(self):
+        # Since t.ppf is computed exactly rather than looked up from a
+        # coarse table, the multiplier should decrease smoothly as df
+        # grows, with no plateaus between tabulated points.
+        assert t_multiplier(30, 0.95) > t_multiplier(35, 0.95)
+        assert t_multiplier(35, 0.95) > t_multiplier(40, 0.95)
 
     def test_rejects_unsupported_confidence_level(self):
         with pytest.raises(ValueError):

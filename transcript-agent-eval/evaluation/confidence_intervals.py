@@ -14,59 +14,25 @@ The general pattern used throughout is:
 
     confidence interval = estimate +/- multiplier * standard error
 
-Standard library only. No numpy, scipy or pandas dependency, so this
-module can run in CI without extra installs.
+The actual distribution math (t and normal quantiles, Wilson score
+intervals, and the t-test confidence intervals themselves) comes from
+`scipy.stats` rather than a hand-rolled formula or a lookup table, so
+this module is a thin, book-shaped wrapper around library calls rather
+than an independent implementation of the statistics.
 """
 
-import math
-import statistics
+import warnings
 from typing import Any, Dict, List, Optional
+
+import numpy as np
+from scipy import stats
 
 
 # ---------------------------------------------------------------------------
 # Multipliers
 # ---------------------------------------------------------------------------
 
-# Two-sided t multipliers keyed by confidence level, then degrees of freedom.
-#
-# The chapter notes that 1.96 is only appropriate when the sample is large
-# enough. For the small samples typical of AI evals the multiplier is larger,
-# so a t table is used instead of assuming 1.96.
-
-T_TABLE: Dict[float, Dict[int, float]] = {
-    0.90: {
-        1: 6.314, 2: 2.920, 3: 2.353, 4: 2.132, 5: 2.015,
-        6: 1.943, 7: 1.895, 8: 1.860, 9: 1.833, 10: 1.812,
-        11: 1.796, 12: 1.782, 13: 1.771, 14: 1.761, 15: 1.753,
-        16: 1.746, 17: 1.740, 18: 1.734, 19: 1.729, 20: 1.725,
-        21: 1.721, 22: 1.717, 23: 1.714, 24: 1.711, 25: 1.708,
-        26: 1.706, 27: 1.703, 28: 1.701, 29: 1.699, 30: 1.697,
-        40: 1.684, 50: 1.676, 60: 1.671, 80: 1.664, 100: 1.660,
-        120: 1.658,
-    },
-    0.95: {
-        1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571,
-        6: 2.447, 7: 2.365, 8: 2.306, 9: 2.262, 10: 2.228,
-        11: 2.201, 12: 2.179, 13: 2.160, 14: 2.145, 15: 2.131,
-        16: 2.120, 17: 2.110, 18: 2.101, 19: 2.093, 20: 2.086,
-        21: 2.080, 22: 2.074, 23: 2.069, 24: 2.064, 25: 2.060,
-        26: 2.056, 27: 2.052, 28: 2.048, 29: 2.045, 30: 2.042,
-        40: 2.021, 50: 2.009, 60: 2.000, 80: 1.990, 100: 1.984,
-        120: 1.980,
-    },
-    0.99: {
-        1: 63.657, 2: 9.925, 3: 5.841, 4: 4.604, 5: 4.032,
-        6: 3.707, 7: 3.499, 8: 3.355, 9: 3.250, 10: 3.169,
-        11: 3.106, 12: 3.055, 13: 3.012, 14: 2.977, 15: 2.947,
-        16: 2.921, 17: 2.898, 18: 2.878, 19: 2.861, 20: 2.845,
-        21: 2.831, 22: 2.819, 23: 2.807, 24: 2.797, 25: 2.787,
-        26: 2.779, 27: 2.771, 28: 2.763, 29: 2.756, 30: 2.750,
-        40: 2.704, 50: 2.678, 60: 2.660, 80: 2.639, 100: 2.626,
-        120: 2.617,
-    },
-}
-
-SUPPORTED_CONFIDENCE_LEVELS = sorted(T_TABLE.keys())
+SUPPORTED_CONFIDENCE_LEVELS = (0.90, 0.95, 0.99)
 
 
 def z_multiplier(
@@ -75,26 +41,30 @@ def z_multiplier(
     """
     Normal multiplier for the requested confidence level.
 
-    Returns approximately 1.96 for a 95% interval.
+    Returns approximately 1.96 for a 95% interval. Backed by
+    scipy.stats.norm.ppf rather than a hardcoded constant.
     """
 
     _validate_confidence(confidence)
 
     tail = (1.0 - confidence) / 2.0
 
-    return statistics.NormalDist().inv_cdf(1.0 - tail)
+    return float(
+        stats.norm.ppf(1.0 - tail)
+    )
 
 
 def t_multiplier(
-    degrees_of_freedom: int,
+    degrees_of_freedom: float,
     confidence: float = 0.95,
 ) -> float:
     """
-    Two-sided t multiplier.
+    Two-sided t multiplier for the given degrees of freedom.
 
-    Degrees of freedom that are not tabulated fall back to the largest
-    tabulated value below them, which keeps the multiplier conservative
-    (slightly wider interval) rather than optimistic.
+    Backed by scipy.stats.t.ppf, so this is exact for any degrees of
+    freedom rather than an approximation looked up from a table. As df
+    grows, this converges on z_multiplier() the same way the chapter's
+    t-table does.
     """
 
     _validate_confidence(confidence)
@@ -104,35 +74,18 @@ def t_multiplier(
             "degrees_of_freedom must be at least 1"
         )
 
-    table = T_TABLE[confidence]
+    tail = (1.0 - confidence) / 2.0
 
-    if degrees_of_freedom in table:
-        return table[degrees_of_freedom]
-
-    # Beyond the table the t multiplier has effectively converged on z.
-    if degrees_of_freedom > max(table):
-        return round(
-            z_multiplier(confidence),
-            3,
-        )
-
-    tabulated = [
-        df
-        for df in table
-        if df <= degrees_of_freedom
-    ]
-
-    if not tabulated:
-        return table[1]
-
-    return table[max(tabulated)]
+    return float(
+        stats.t.ppf(1.0 - tail, df=degrees_of_freedom)
+    )
 
 
 def _validate_confidence(
     confidence: float,
 ) -> None:
 
-    if confidence not in T_TABLE:
+    if confidence not in SUPPORTED_CONFIDENCE_LEVELS:
         raise ValueError(
             f"Unsupported confidence level: {confidence}. "
             f"Supported levels: {SUPPORTED_CONFIDENCE_LEVELS}"
@@ -158,9 +111,16 @@ def proportion_interval(
         standard_error = sqrt((p_hat * (1 - p_hat)) / total)
         interval       = p_hat +/- 1.96 * standard_error
 
-    method="wilson" is the default because the chapter notes that Wilson
-    or exact binomial intervals are often better for small samples or for
-    rates close to 0% or 100%, which is the normal situation in AI evals.
+    scipy has no Wald proportion interval (it is known to misbehave at
+    the edges), so this is the one formula in the module still written
+    out directly; the multiplier itself still comes from
+    scipy.stats.norm.
+
+    method="wilson" is the default, computed by
+    scipy.stats.binomtest(...).proportion_ci(method="wilson"), because
+    the chapter notes that Wilson or exact binomial intervals are often
+    better for small samples or for rates close to 0% or 100%, which is
+    the normal situation in AI evals.
 
     A Wald interval on a 10/10 sample collapses to [1.0, 1.0], which
     claims a certainty the sample does not support. Wilson does not.
@@ -189,8 +149,8 @@ def proportion_interval(
 
     if method == "wald":
 
-        standard_error = math.sqrt(
-            (p_hat * (1.0 - p_hat)) / total
+        standard_error = float(
+            np.sqrt((p_hat * (1.0 - p_hat)) / total)
         )
 
         margin = z * standard_error
@@ -200,21 +160,19 @@ def proportion_interval(
 
     else:
 
-        denominator = 1.0 + (z ** 2) / total
+        result = stats.binomtest(passes, total)
 
-        center = (
-            p_hat + (z ** 2) / (2 * total)
-        ) / denominator
-
-        standard_error = math.sqrt(
-            (p_hat * (1.0 - p_hat)) / total
-            + (z ** 2) / (4 * total ** 2)
+        ci = result.proportion_ci(
+            confidence_level=confidence,
+            method="wilson",
         )
 
-        margin = (z / denominator) * standard_error
+        lower, upper = ci.low, ci.high
 
-        lower = center - margin
-        upper = center + margin
+        # Report the standard error/margin in the same shape as Wald so
+        # callers and the report tables don't need to branch on method.
+        standard_error = (upper - lower) / (2 * z)
+        margin = z * standard_error
 
     return {
         "kind": "proportion",
@@ -247,8 +205,11 @@ def mean_interval(
         standard_error = sample_standard_deviation / sqrt(n)
         interval       = mean +/- t_multiplier * standard_error
 
-    The sample standard deviation uses the n-1 denominator, matching
-    STDEV.S in a spreadsheet.
+    numpy computes the mean and sample standard deviation (ddof=1,
+    matching STDEV.S in a spreadsheet); the interval itself is produced
+    by scipy.stats.ttest_1samp(...).confidence_interval(), a one-sample
+    t-test's confidence interval for the mean, rather than assembled by
+    hand from the multiplier and standard error.
 
     A single observation has no spread to measure, so no interval is
     reported for n = 1. That is a real limitation of the sample, not a
@@ -257,14 +218,16 @@ def mean_interval(
 
     _validate_confidence(confidence)
 
-    n = len(scores)
+    values = np.asarray(scores, dtype=float)
+
+    n = values.size
 
     if n == 0:
         raise ValueError(
             "scores must not be empty"
         )
 
-    mean = statistics.mean(scores)
+    mean = float(np.mean(values))
 
     if n == 1:
 
@@ -287,21 +250,34 @@ def mean_interval(
             ),
         }
 
-    sample_standard_deviation = statistics.stdev(scores)
+    sample_standard_deviation = float(np.std(values, ddof=1))
 
-    standard_error = sample_standard_deviation / math.sqrt(n)
+    degenerate = sample_standard_deviation == 0
 
+    with warnings.catch_warnings():
+
+        # A degenerate (zero-variance) sample makes scipy warn about
+        # precision loss in its internal moment calculation. The result
+        # (a zero-width interval) is correct and is exactly what
+        # `degenerate` below is flagging, so the warning is expected
+        # noise here rather than a sign something went wrong.
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+        )
+
+        result = stats.ttest_1samp(values, popmean=0.0)
+        ci = result.confidence_interval(confidence_level=confidence)
+
+    lower = float(ci.low)
+    upper = float(ci.high)
+
+    standard_error = sample_standard_deviation / float(np.sqrt(n))
     multiplier = t_multiplier(
         degrees_of_freedom=n - 1,
         confidence=confidence,
     )
-
     margin = multiplier * standard_error
-
-    # Every observation identical gives a zero-width interval. That is an
-    # artefact of a small sample, not proof the true value is exact, and
-    # it is the same trap as a Wald interval on a 100% pass rate.
-    degenerate = sample_standard_deviation == 0
 
     warning = _sample_size_warning(n)
 
@@ -322,7 +298,7 @@ def mean_interval(
         "kind": "mean",
         "method": "t",
         "confidence": confidence,
-        "n": n,
+        "n": int(n),
         "estimate": round(mean, 2),
         "sample_standard_deviation": round(
             sample_standard_deviation,
@@ -331,8 +307,8 @@ def mean_interval(
         "standard_error": round(standard_error, 4),
         "multiplier": round(multiplier, 3),
         "margin_of_error": round(margin, 2),
-        "lower": round(mean - margin, 2),
-        "upper": round(mean + margin, 2),
+        "lower": round(lower, 2),
+        "upper": round(upper, 2),
         "degenerate": degenerate,
         "sample_size_warning": warning,
     }
@@ -355,8 +331,11 @@ def two_sample_difference_interval(
         standard_error_difference = sqrt((sd_A^2 / n_A) + (sd_B^2 / n_B))
         interval                  = difference +/- t * standard_error_difference
 
-    Degrees of freedom use the Welch-Satterthwaite approximation, which
-    does not assume the two samples have equal variance.
+    Computed by scipy.stats.ttest_ind(..., equal_var=False), Welch's
+    t-test, which does not assume the two samples have equal variance.
+    Its .confidence_interval() gives the interval directly and its
+    `.df` gives the Welch-Satterthwaite degrees of freedom, so neither
+    is derived by hand here.
 
     The chapter is explicit that comparing two marginal intervals for
     visual overlap is not a substitute for this calculation.
@@ -364,8 +343,11 @@ def two_sample_difference_interval(
 
     _validate_confidence(confidence)
 
-    n_a = len(scores_a)
-    n_b = len(scores_b)
+    values_a = np.asarray(scores_a, dtype=float)
+    values_b = np.asarray(scores_b, dtype=float)
+
+    n_a = values_a.size
+    n_b = values_b.size
 
     if n_a < 2 or n_b < 2:
         raise ValueError(
@@ -373,48 +355,55 @@ def two_sample_difference_interval(
             "a difference interval."
         )
 
-    mean_a = statistics.mean(scores_a)
-    mean_b = statistics.mean(scores_b)
+    mean_a = float(np.mean(values_a))
+    mean_b = float(np.mean(values_b))
 
-    var_a = statistics.variance(scores_a)
-    var_b = statistics.variance(scores_b)
+    with warnings.catch_warnings():
+
+        # As in mean_interval(), a zero-variance sample (every score in
+        # one version identical) makes scipy warn about precision loss
+        # in its internal moment calculation. The resulting interval is
+        # still correct.
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+        )
+
+        result = stats.ttest_ind(
+            values_b,
+            values_a,
+            equal_var=False,
+        )
+
+        ci = result.confidence_interval(confidence_level=confidence)
+
+    lower = float(ci.low)
+    upper = float(ci.high)
 
     difference = mean_b - mean_a
+    degrees_of_freedom = float(result.df)
 
-    standard_error = math.sqrt(
-        (var_a / n_a) + (var_b / n_b)
+    standard_error = (
+        (upper - lower)
+        / (2 * t_multiplier(degrees_of_freedom, confidence))
     )
-
-    degrees_of_freedom = _welch_degrees_of_freedom(
-        var_a=var_a,
-        n_a=n_a,
-        var_b=var_b,
-        n_b=n_b,
-    )
-
-    multiplier = t_multiplier(
-        degrees_of_freedom=degrees_of_freedom,
-        confidence=confidence,
-    )
-
-    margin = multiplier * standard_error
-
-    lower = difference - margin
-    upper = difference + margin
 
     return {
         "kind": "difference_independent",
         "method": "welch_t",
         "confidence": confidence,
-        "n_a": n_a,
-        "n_b": n_b,
+        "n_a": int(n_a),
+        "n_b": int(n_b),
         "mean_a": round(mean_a, 2),
         "mean_b": round(mean_b, 2),
         "estimate": round(difference, 2),
         "standard_error": round(standard_error, 4),
-        "degrees_of_freedom": degrees_of_freedom,
-        "multiplier": round(multiplier, 3),
-        "margin_of_error": round(margin, 2),
+        "degrees_of_freedom": round(degrees_of_freedom, 2),
+        "multiplier": round(
+            t_multiplier(degrees_of_freedom, confidence),
+            3,
+        ),
+        "margin_of_error": round((upper - lower) / 2, 2),
         "lower": round(lower, 2),
         "upper": round(upper, 2),
         "crosses_zero": lower <= 0 <= upper,
@@ -436,7 +425,11 @@ def paired_difference_interval(
     both versions, because differencing case by case removes a lot of
     case-to-case noise.
 
-    The interval is a mean interval over the per-case differences.
+    Mathematically, a paired t-test is a one-sample t-test on the
+    per-pair differences (this is also how scipy.stats.ttest_rel is
+    implemented internally), so the differences are handed to
+    mean_interval(), which is itself backed by
+    scipy.stats.ttest_1samp(...).confidence_interval().
     """
 
     _validate_confidence(confidence)
@@ -451,13 +444,10 @@ def paired_difference_interval(
             "Paired samples must not be empty."
         )
 
-    differences = [
-        after - before
-        for before, after in zip(
-            scores_before,
-            scores_after,
-        )
-    ]
+    before = np.asarray(scores_before, dtype=float)
+    after = np.asarray(scores_after, dtype=float)
+
+    differences = (after - before).tolist()
 
     interval = mean_interval(
         differences,
@@ -468,14 +458,8 @@ def paired_difference_interval(
         {
             "kind": "difference_paired",
             "pairs": len(differences),
-            "mean_before": round(
-                statistics.mean(scores_before),
-                2,
-            ),
-            "mean_after": round(
-                statistics.mean(scores_after),
-                2,
-            ),
+            "mean_before": round(float(np.mean(before)), 2),
+            "mean_after": round(float(np.mean(after)), 2),
             "differences": [
                 round(value, 2)
                 for value in differences
@@ -488,33 +472,6 @@ def paired_difference_interval(
     )
 
     return interval
-
-
-def _welch_degrees_of_freedom(
-    var_a: float,
-    n_a: int,
-    var_b: float,
-    n_b: int,
-) -> int:
-
-    term_a = var_a / n_a
-    term_b = var_b / n_b
-
-    numerator = (term_a + term_b) ** 2
-
-    denominator = (
-        (term_a ** 2) / (n_a - 1)
-        + (term_b ** 2) / (n_b - 1)
-    )
-
-    if denominator == 0:
-        return min(n_a, n_b) - 1
-
-    # Round down so the multiplier stays conservative.
-    return max(
-        1,
-        int(math.floor(numerator / denominator)),
-    )
 
 
 # ---------------------------------------------------------------------------
@@ -586,7 +543,7 @@ def compare_to_threshold(
 
 
 def runs_needed_for_margin(
-    sample_standard_deviation: float,
+    sample_standard_deviation: Optional[float],
     target_margin: float,
     confidence: float = 0.95,
 ) -> Optional[int]:
@@ -610,10 +567,7 @@ def runs_needed_for_margin(
             "target_margin must be greater than zero"
         )
 
-    if sample_standard_deviation is None:
-        return None
-
-    if sample_standard_deviation == 0:
+    if not sample_standard_deviation:
         return None
 
     z = z_multiplier(confidence)
@@ -624,7 +578,7 @@ def runs_needed_for_margin(
 
     return max(
         2,
-        int(math.ceil(required)),
+        int(np.ceil(required)),
     )
 
 
