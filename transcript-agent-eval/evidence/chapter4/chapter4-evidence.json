@@ -1,0 +1,460 @@
+{
+  "generated_at": "2026-09-17T13:27:17.913675+00:00",
+  "baseline_model": "qwen2.5:3b",
+  "variant_model": "qwen2.5:0.5b",
+  "temperature": 0.0,
+  "match_threshold": 0.6,
+  "f_scores": {
+    "qwen2.5:0.5b / base": {
+      "model": "qwen2.5:0.5b",
+      "condition": "base",
+      "parsed_runs": 2,
+      "total_runs": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f0.5": 0.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "true_positives": 0,
+      "false_positives": 8,
+      "false_negatives": 12
+    },
+    "qwen2.5:0.5b / filler": {
+      "model": "qwen2.5:0.5b",
+      "condition": "filler",
+      "parsed_runs": 2,
+      "total_runs": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f0.5": 0.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "true_positives": 0,
+      "false_positives": 8,
+      "false_negatives": 12
+    },
+    "qwen2.5:3b / base": {
+      "model": "qwen2.5:3b",
+      "condition": "base",
+      "parsed_runs": 2,
+      "total_runs": 2,
+      "precision": 0.4286,
+      "recall": 0.5,
+      "f0.5": 0.4412,
+      "f1": 0.4615,
+      "f2": 0.4839,
+      "true_positives": 6,
+      "false_positives": 8,
+      "false_negatives": 6
+    },
+    "qwen2.5:3b / filler": {
+      "model": "qwen2.5:3b",
+      "condition": "filler",
+      "parsed_runs": 2,
+      "total_runs": 2,
+      "precision": 0.3333,
+      "recall": 0.4167,
+      "f0.5": 0.3472,
+      "f1": 0.3704,
+      "f2": 0.3968,
+      "true_positives": 5,
+      "false_positives": 10,
+      "false_negatives": 7
+    }
+  },
+  "hypotheses": {
+    "h1_filler": {
+      "test": "paired_flip_test",
+      "p_value": 1.0,
+      "got_better": 1,
+      "got_worse": 2,
+      "changed": 3,
+      "smallest_possible_p": 0.25,
+      "verdict": "UNDERPOWERED",
+      "explanation": "p = 1.0, but with only 3 changed items the smallest p-value possible was 0.25, which is already above alpha = 0.05. No result could have been significant, so this is not evidence of no effect."
+    },
+    "h2_risk": {
+      "test": "chi_squared",
+      "chi2": 0.0,
+      "p_value": 1.0,
+      "degrees_of_freedom": 1,
+      "observed": [
+        [
+          2,
+          2
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "expected": [
+        [
+          2.0,
+          2.0
+        ],
+        [
+          4.0,
+          4.0
+        ]
+      ],
+      "cramers_v": 0.0,
+      "expected_counts_ok": false,
+      "row_labels": [
+        "high risk",
+        "other risk"
+      ],
+      "column_labels": [
+        "extracted",
+        "missed"
+      ],
+      "verdict": "NOT_TESTED",
+      "explanation": "Not tested: some expected cell counts are below 5, where the chi-squared p-value stops being trustworthy. Collect more data or merge categories."
+    },
+    "h3_models": {
+      "test": "chi_squared",
+      "chi2": 5.5556,
+      "p_value": 0.0184221,
+      "degrees_of_freedom": 1,
+      "observed": [
+        [
+          6,
+          6
+        ],
+        [
+          0,
+          12
+        ]
+      ],
+      "expected": [
+        [
+          3.0,
+          9.0
+        ],
+        [
+          3.0,
+          9.0
+        ]
+      ],
+      "cramers_v": 0.4811,
+      "expected_counts_ok": false,
+      "row_labels": [
+        "qwen2.5:3b",
+        "qwen2.5:0.5b"
+      ],
+      "column_labels": [
+        "extracted",
+        "missed"
+      ],
+      "verdict": "NOT_TESTED",
+      "explanation": "Not tested: some expected cell counts are below 5, where the chi-squared p-value stops being trustworthy. Collect more data or merge categories."
+    }
+  },
+  "records": [
+    {
+      "case_id": "meeting_transcript",
+      "model": "qwen2.5:3b",
+      "condition": "base",
+      "parsed": true,
+      "predicted_items": [
+        "Discuss UX feedback with design team",
+        "Explore embedding similarity for confidence measurement",
+        "Work on hybrid model approach with GPT-4o and Claude",
+        "Implement fallback messaging for low-confidence cases",
+        "Prioritize similarity metric development",
+        "Set up test run for hybrid model approach",
+        "Explore UX feedback and implement fallback messaging",
+        "Develop similarity metric",
+        "Set up test run for hybrid model approach"
+      ],
+      "y_true": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "meeting_transcript",
+      "model": "qwen2.5:3b",
+      "condition": "filler",
+      "parsed": true,
+      "predicted_items": [
+        "Implement two-pass system with GPT-4o and Claude",
+        "Explore and implement similarity scoring",
+        "Work on fallback messaging for low-confidence cases",
+        "Sync with design on fallback UX messaging",
+        "Set up test run for hybrid model approach",
+        "Implement two-pass system with GPT-4o and Claude",
+        "Explore and implement similarity scoring",
+        "Work on fallback messaging for low-confidence cases",
+        "Sync with design on fallback UX messaging",
+        "Set up test run for hybrid model approach"
+      ],
+      "y_true": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "case_id": "team_call_transcript",
+      "model": "qwen2.5:3b",
+      "condition": "base",
+      "parsed": true,
+      "predicted_items": [
+        "Send write-up of query changes to James",
+        "Reach out to Sarah about incremental backups",
+        "Batch job optimisation",
+        "Temporary backup window shift",
+        "On-call rotation adjustment"
+      ],
+      "y_true": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "team_call_transcript",
+      "model": "qwen2.5:3b",
+      "condition": "filler",
+      "parsed": true,
+      "predicted_items": [
+        "Optimise batch job",
+        "Write requirements doc for incremental backup switch",
+        "Shadow on-call week for Lena and Marcus",
+        "Shift backup window temporarily",
+        "Rebalance on-call rotation"
+      ],
+      "y_true": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "meeting_transcript",
+      "model": "qwen2.5:0.5b",
+      "condition": "base",
+      "parsed": true,
+      "predicted_items": [
+        "Not sure about this? Contact a human agent",
+        "Not sure about this? Contact a human agent",
+        "Not sure about this? Contact a human agent"
+      ],
+      "y_true": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "meeting_transcript",
+      "model": "qwen2.5:0.5b",
+      "condition": "filler",
+      "parsed": true,
+      "predicted_items": [
+        "Not sure about this? Contact a human agent",
+        "Not sure about this? Contact a human agent",
+        "Not sure about this? Contact a human agent"
+      ],
+      "y_true": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "team_call_transcript",
+      "model": "qwen2.5:0.5b",
+      "condition": "base",
+      "parsed": true,
+      "predicted_items": [
+        "Task 1",
+        "Task 2",
+        "Task 1",
+        "Task 1",
+        "Task 2"
+      ],
+      "y_true": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "case_id": "team_call_transcript",
+      "model": "qwen2.5:0.5b",
+      "condition": "filler",
+      "parsed": true,
+      "predicted_items": [
+        "Task 1",
+        "Task 2",
+        "Task 1",
+        "Task 1",
+        "Task 2"
+      ],
+      "y_true": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "y_pred": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

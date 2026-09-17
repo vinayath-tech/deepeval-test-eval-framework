@@ -1,0 +1,119 @@
+{
+  "_schema": {
+    "description": "Human-annotated gold action items, one entry per transcript in dataset/. Shape mirrors the JSON contract in PromptManager.ACTION_ITEM_PROMPT so gold and prediction can be compared field by field.",
+    "fields": {
+      "individual_actions": "assignee -> list of tasks explicitly committed to by that person",
+      "team_actions": "tasks the group committed to without a single named owner",
+      "entities": "named people appearing in the transcript"
+    },
+    "aliases": "Optional per-task accepted paraphrases. Action items are free text, so the agent may phrase a correct extraction differently. Aliases widen what counts as a true positive without weakening the matching threshold.",
+    "annotation_rule": "Only tasks explicitly committed to in the transcript. Suggestions, options under discussion, and hypotheticals are NOT action items - this mirrors the prompt's 'Only include what is explicitly mentioned. Do not infer.'"
+  },
+
+  "meeting_transcript": {
+    "individual_actions": {
+      "Ethan": [
+        "sync with design on the fallback UX messaging"
+      ],
+      "Maya": [
+        "build the similarity scoring metric",
+        "set up a test run for the hybrid two-pass model approach"
+      ]
+    },
+    "team_actions": [
+      "regroup next week to review progress"
+    ],
+    "entities": [
+      "Ethan",
+      "Maya"
+    ],
+    "aliases": {
+      "sync with design on the fallback UX messaging": [
+        "talk to design about fallback messaging",
+        "work with design on the low-confidence fallback UX",
+        "coordinate with design on fallback banner wording"
+      ],
+      "build the similarity scoring metric": [
+        "prioritize building the similarity metric",
+        "work on embedding similarity scoring",
+        "implement the similarity metric"
+      ],
+      "set up a test run for the hybrid two-pass model approach": [
+        "set up a test run for the hybrid model approach",
+        "test the two-pass system with GPT-4o and Claude",
+        "run a test of the hybrid GPT-4o and Claude approach"
+      ],
+      "regroup next week to review progress": [
+        "regroup next week",
+        "meet again next week",
+        "sync again next week"
+      ]
+    }
+  },
+
+  "team_call_transcript": {
+    "individual_actions": {
+      "James": [
+        "reach out to Sarah about the incremental backups and flag it as a priority",
+        "raise the temporary backup window shift with ops",
+        "set up shadowed on-call weeks for Lena and Marcus"
+      ],
+      "Adam": [
+        "start the batch job optimisation this sprint",
+        "write up the requirements doc for incremental backups and hand it to Sarah",
+        "send James a write-up of the planned query changes"
+      ]
+    },
+    "team_actions": [
+      "temporarily shift the backup window to stop the weekend alerts",
+      "bring Lena and Marcus into the on-call rotation starting next month"
+    ],
+    "entities": [
+      "James",
+      "Adam",
+      "Sarah",
+      "Lena",
+      "Marcus",
+      "Chris"
+    ],
+    "aliases": {
+      "reach out to Sarah about the incremental backups and flag it as a priority": [
+        "contact Sarah about incremental backups",
+        "loop in Sarah about the incremental backups",
+        "flag the incremental backup work to Sarah as a priority"
+      ],
+      "raise the temporary backup window shift with ops": [
+        "get the backup window change raised with ops",
+        "raise the temporary window shift with operations",
+        "ask ops to shift the backup window temporarily"
+      ],
+      "set up shadowed on-call weeks for Lena and Marcus": [
+        "arrange shadowed on-call weeks for the new team members",
+        "set up shadow on-call for Lena and Marcus"
+      ],
+      "start the batch job optimisation this sprint": [
+        "optimise the batch job this sprint",
+        "begin batch job optimisation",
+        "work on batch job performance this sprint"
+      ],
+      "write up the requirements doc for incremental backups and hand it to Sarah": [
+        "write the requirements doc and hand it off to Sarah",
+        "prepare the requirements document for incremental backups"
+      ],
+      "send James a write-up of the planned query changes": [
+        "send a quick write-up of the query changes",
+        "share the planned query changes with James"
+      ],
+      "temporarily shift the backup window to stop the weekend alerts": [
+        "shift the backup window temporarily",
+        "move the backup window as a temporary fix",
+        "temporary backup window shift"
+      ],
+      "bring Lena and Marcus into the on-call rotation starting next month": [
+        "add Lena and Marcus to the on-call rotation",
+        "bring the new team members into the on-call rotation next month",
+        "rebalance the on-call rotation with Lena and Marcus"
+      ]
+    }
+  }
+}
